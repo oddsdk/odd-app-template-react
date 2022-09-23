@@ -1,12 +1,11 @@
-import { FormEvent, useContext, useState } from "react";
+import { FormEvent, useState } from "react";
+
 import { appName } from '../../../lib/app-info'
 import {
   isUsernameValid,
   isUsernameAvailable,
   register
 } from '../../../lib/auth/account'
-import FilesystemContext from "../../../contexts/FilesystemContext";
-import SessionContext from "../../../contexts/SessionContext";
 import CheckIcon from '../../icons/CheckIcon'
 import XIcon from '../../icons/XIcon'
 import FilesystemActivity from '../../common/FilesystemActivity'
@@ -20,8 +19,6 @@ let checkingUsername = false
 let initializingFilesystem = false
 
 const Register = () => {
-  const { session, updateSession } = useContext(SessionContext);
-  const { updateFilesystem } = useContext(FilesystemContext);
   const [buttonDisabled, setButtonDisabled] = useState(
     username.length === 0 || !usernameValid || !usernameAvailable
   );
@@ -49,7 +46,7 @@ const Register = () => {
   const handleRegisterUser = async () => {
     initializingFilesystem = true
 
-    registrationSuccess = await register(username, session, updateSession, updateFilesystem)
+    registrationSuccess = await register(username)
 
     if (!registrationSuccess) initializingFilesystem = false
   }

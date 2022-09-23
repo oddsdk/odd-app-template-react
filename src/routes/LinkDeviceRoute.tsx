@@ -1,10 +1,7 @@
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom'
 import type { account } from 'webnative'
 
-import FilesystemContext from '../contexts/FilesystemContext';
-import NotificationsContext from '../contexts/NotificationsContext';
-import SessionContext from '../contexts/SessionContext';
 import { addNotification } from '../lib/notifications'
 import { createAccountLinkingConsumer } from '../lib/auth/linking'
 import { loadAccount } from '../lib/auth/account'
@@ -22,9 +19,6 @@ let accountLinkingConsumer: account.AccountLinkingConsumer;
 
 const LinkDeviceRoute = () => {
   const navigate = useNavigate();
-  const { updateFilesystem } = useContext(FilesystemContext)
-  const notificationsContext = useContext(NotificationsContext)
-  const sessionContext = useContext(SessionContext)
   const [view, setView] = useState<LinkDeviceView>('link-device');
   const [displayPin, setDisplayPin] = useState<string>('');
   // const [accountLinkingConsumer, setAccountLinkingConsumer] =
@@ -46,19 +40,19 @@ const LinkDeviceRoute = () => {
       if (approved) {
         setView('load-filesystem');
 
-        await loadAccount({ username, updateFilesystem, ...sessionContext });
+        await loadAccount(username);
 
-        addNotification({ notification: { msg: 'You\'re now connected!', type: 'success' }, ...notificationsContext });
+        addNotification({ msg: 'You\'re now connected!', type: 'success' });
         navigate('/');
       } else {
-        addNotification({ notification: { msg: 'The connection attempt was cancelled', type: 'info'}, ...notificationsContext });
+        addNotification({ msg: 'The connection attempt was cancelled', type: 'info'});
         navigate('/');
       }
     });
   };
 
   const cancelConnection = async () => {
-    addNotification({ notification: { msg: 'The connection attempt was cancelled', type: 'info' }, ...notificationsContext });
+    addNotification({ msg: 'The connection attempt was cancelled', type: 'info' });
 
     accountLinkingConsumer?.cancel();
     navigate('/');

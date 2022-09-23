@@ -1,22 +1,16 @@
 import * as webnative from "webnative";
 import { setup } from "webnative";
 import type FileSystem from "webnative/fs/index";
+import { getRecoil, setRecoil } from "recoil-nexus";
 
-import { SESSION_ERROR, type SESSION_STORE } from "../contexts/SessionContext";
+import { sessionStore, filesystemStore } from "../stores";
+import { SESSION_ERROR } from "../lib/session";
 import { getBackupStatus, type BackupStatus } from "../lib/auth/backup";
 
 // TODO: Add a flag or script to turn debugging on/off
 setup.debug({ enabled: false });
 
-type Initialize = SESSION_STORE & {
-  updateFilesystem: (fs: FileSystem | null) => void;
-}
-
-const initialize = async ({
-  session,
-  updateSession,
-  updateFilesystem,
-}: Initialize): Promise<void> => {
+const initialize = async (): Promise<void> => {
   try {
     let backupStatus: BackupStatus = null;
 
@@ -24,8 +18,8 @@ const initialize = async ({
 
     switch (state.scenario) {
       case webnative.AppScenario.NotAuthed:
-        updateSession({
-          username: '',
+        setRecoil(sessionStore, {
+          username: "",
           authed: false,
           loading: false,
           backupCreated: false,
@@ -33,25 +27,28 @@ const initialize = async ({
         break;
 
       case webnative.AppScenario.Authed:
-        backupStatus = await getBackupStatus(state.fs);
+        backupStatus = await getBackupStatus(state.fs as FileSystem);
 
-        updateSession({
+        setRecoil(sessionStore, {
           username: state.username,
           authed: state.authenticated,
           loading: false,
           backupCreated: !!backupStatus?.created,
         });
 
-        updateFilesystem(state.fs as FileSystem);
+        setRecoil(filesystemStore, state.fs as FileSystem);
         break;
 
       default:
         break;
     }
   } catch (error) {
+
+    const session = getRecoil(sessionStore);
+
     switch (error) {
       case webnative.InitialisationError.InsecureContext:
-        updateSession({
+        setRecoil(sessionStore, {
           ...session,
           loading: false,
           error: SESSION_ERROR.INSECURE_CONTEXT,
@@ -59,7 +56,7 @@ const initialize = async ({
         break;
 
       case webnative.InitialisationError.UnsupportedBrowser:
-        updateSession({
+        setRecoil(sessionStore, {
           ...session,
           loading: false,
           error: SESSION_ERROR.UNSUPORTED_CONTEXT,

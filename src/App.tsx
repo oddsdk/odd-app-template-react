@@ -1,10 +1,10 @@
 import './App.css';
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useRecoilValue } from 'recoil';
+
 import init from "./lib/init";
-import FilesystemContext from "./contexts/FilesystemContext";
-import SessionContext from "./contexts/SessionContext";
-import ThemeContext from "./contexts/ThemeContext";
+import { themeStore } from './stores';
 import Header from './components/Header';
 import Notifications from './components/notifications/Notifications';
 import Home from './routes/HomeRoute';
@@ -16,12 +16,11 @@ import Gallery from './routes/GalleryRoute';
 import Register from './routes/RegisterRoute';
 
 const App = () => {
-  const { theme } = useContext(ThemeContext);
-  const { session, updateSession } = useContext(SessionContext);
-  const { updateFilesystem } = useContext(FilesystemContext);
+  const theme = useRecoilValue(themeStore);
+
   const useMountEffect = () =>
     useEffect(() => {
-      init({ session, updateSession, updateFilesystem })
+      init()
     }, []);
 
   useMountEffect()

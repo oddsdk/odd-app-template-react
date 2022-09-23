@@ -1,10 +1,7 @@
-import { DragEvent, ReactNode, useContext, useState } from 'react';
+import { DragEvent, ReactNode, useState } from 'react';
 
 import { addNotification } from '../../../lib/notifications'
 import { getImagesFromWNFS, uploadImageToWNFS } from '../../../lib/gallery'
-import FilesystemContext from '../../../contexts/FilesystemContext'
-import GalleryContext from '../../../contexts/GalleryContext'
-import NotificationsContext from '../../../contexts/NotificationsContext'
 
 /**
  * This is needed to prevent the default behaviour of the file opening in browser
@@ -19,9 +16,6 @@ type Props = {
 }
 
 const Dropzone = ({ children }: Props) => {
-  const { fs } = useContext(FilesystemContext);
-  const { gallery, updateGallery } = useContext(GalleryContext);
-  const notificationsContext = useContext(NotificationsContext);
   const [isDragging, setIsDragging] = useState(false);
 
   /**
@@ -50,24 +44,16 @@ const Dropzone = ({ children }: Props) => {
 
           // If the dropped files aren't images, we don't want them!
           if (!file.type.match("image/*")) {
-            addNotification({
-              notification: { msg: "Please upload images only", type: "error" },
-              ...notificationsContext,
-            });
+            addNotification({ msg: "Please upload images only", type: "error" });
           } else {
-            await uploadImageToWNFS({
-              image: file,
-              gallery,
-              fs,
-              ...notificationsContext,
-            });
+            await uploadImageToWNFS(file);
           }
         }
       })
     );
 
     // Refetch images and update galleryStore
-    await getImagesFromWNFS({ gallery, updateGallery, fs });
+    await getImagesFromWNFS();
 
     // Disable isDragging state
     setIsDragging(false);

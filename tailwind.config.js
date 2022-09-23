@@ -50,6 +50,16 @@ module.exports = {
     rtl: false,
     darkTheme: "dark",
   },
+  theme: {
+    extend: {
+      keyframes: {
+        fadeInUp: {
+          'from': { opacity: 0, translate3d: '(0, 100%, 0)' },
+          'to': { opacity: 1, translate3d: '(0, 0, 0)' },
+        },
+      },
+    },
+  },
   purge: {
     options: {
       safelist: ["alert-success", "alert-error", "alert-info", "alert-warning"],

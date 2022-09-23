@@ -1,9 +1,9 @@
-import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilState, useRecoilValue } from "recoil";
 
-import { appName } from '../lib/app-info'
-import SessionContext from '../contexts/SessionContext';
-import ThemeContext, { THEME } from '../contexts/ThemeContext';
+import { sessionStore, themeStore } from '../stores';
+import { THEME } from '../lib/theme';
+import { appName } from '../lib/app-info';
 import Brand from './icons/Brand';
 import DarkMode from './icons/DarkMode';
 import LightMode from './icons/LightMode';
@@ -11,12 +11,12 @@ import Shield from './icons/Shield';
 
 const Header = () => {
   const navigate = useNavigate();
-  const { theme, updateTheme } = useContext(ThemeContext);
-  const { session } = useContext(SessionContext);
+  const [theme, setTheme] = useRecoilState(themeStore);
+  const session = useRecoilValue(sessionStore);
 
   const handleUpdateTheme = () => {
     const newTheme = Object.values(THEME).filter((val) => val !== theme)[0];
-    updateTheme(newTheme);
+    setTheme(newTheme);
   }
 
   return (

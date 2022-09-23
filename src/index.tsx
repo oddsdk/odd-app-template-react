@@ -1,12 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { RecoilRoot } from 'recoil';
+import RecoilNexus from "recoil-nexus";
+
 import './index.css';
-import { FilesystemProvider } from "./contexts/FilesystemContext";
-import { GalleryProvider } from "./contexts/GalleryContext";
-import { NotificationsProvider } from './contexts/NotificationsContext';
-import { SessionProvider } from './contexts/SessionContext';
-import { ThemeProvider } from './contexts/ThemeContext';
-import Compose from './components/utils/Compose'
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
@@ -15,18 +12,12 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  <Compose
-    components={[
-      React.StrictMode,
-      FilesystemProvider,
-      GalleryProvider,
-      NotificationsProvider,
-      SessionProvider,
-      ThemeProvider,
-    ]}
-  >
-    <App />
-  </Compose>
+  <React.StrictMode>
+    <RecoilRoot>
+      <RecoilNexus />
+        <App />
+    </RecoilRoot>
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

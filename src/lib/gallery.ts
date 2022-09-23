@@ -1,31 +1,60 @@
 import * as uint8arrays from 'uint8arrays';
 import * as wn from 'webnative';
-import type FileSystem from "webnative/fs/index";
+import { getRecoil, setRecoil } from "recoil-nexus";
 
-import { AREAS, type GALLERY, GALLERY_DIRS } from '../contexts/GalleryContext'
-import {  type Notification } from '../contexts/NotificationsContext'
+import { filesystemStore, galleryStore } from '../stores';
 import { addNotification } from '../lib/notifications';
+
+export enum AREAS {
+  PUBLIC = "PUBLIC",
+  PRIVATE = "PRIVATE",
+}
+
+export type Image = {
+  cid: string;
+  ctime: number;
+  name: string;
+  private: boolean;
+  size: number;
+  src: string;
+};
+
+export type GALLERY = {
+  publicImages: Image[];
+  privateImages: Image[];
+  selectedArea: AREAS;
+  loading: boolean;
+};
+
+export const GALLERY_DIRS: {
+  [key: string]: string[];
+} = {
+  [AREAS.PUBLIC]: ["public", "gallery"],
+  [AREAS.PRIVATE]: ["private", "gallery"],
+};
+
+export const initialGallery: GALLERY = {
+  loading: true,
+  publicImages: [],
+  privateImages: [],
+  selectedArea: AREAS.PUBLIC,
+};
+
 
 const FILE_SIZE_LIMIT = 5;
 
 /**
  * Get images from the user's WNFS and construct the `src` value for the images
  */
-type GetParams = {
-  gallery: GALLERY;
-  updateGallery: (gallery: GALLERY) => void;
-  fs: FileSystem | null;
-};
-export const getImagesFromWNFS: (params: GetParams) => Promise<void> = async ({
-  gallery,
-  updateGallery,
-  fs,
-}) => {
-  try {
-    if (!fs) return;
 
+export const getImagesFromWNFS: () => Promise<void> = async () => {
+  const gallery = getRecoil(galleryStore)
+  const fs = getRecoil(filesystemStore);
+  if (!fs) return
+
+  try {
     // Set loading: true on the galleryStore
-    updateGallery({ ...gallery, loading: true });
+    setRecoil(galleryStore, { ...gallery, loading: true });
 
     const { selectedArea } = gallery;
     const isPrivate = selectedArea === AREAS.PRIVATE;
@@ -70,7 +99,7 @@ export const getImagesFromWNFS: (params: GetParams) => Promise<void> = async ({
     images.sort((a, b) => b.ctime - a.ctime);
 
     // Push images to the galleryStore
-    updateGallery({
+    setRecoil(galleryStore, {
       ...gallery,
       ...(isPrivate
         ? {
@@ -82,7 +111,7 @@ export const getImagesFromWNFS: (params: GetParams) => Promise<void> = async ({
       loading: false,
     });
   } catch (error) {
-    updateGallery({
+    setRecoil(galleryStore, {
       ...gallery,
       loading: false,
     });
@@ -93,17 +122,13 @@ export const getImagesFromWNFS: (params: GetParams) => Promise<void> = async ({
  * Upload an image to the user's private or public WNFS
  * @param image
  */
-type UploadParams = {
-  image: File;
-  gallery: GALLERY;
-  fs: FileSystem | null;
-  notifications: Notification[];
-  updateNotifications: (notifications: Notification[]) => void;
-};
-export const uploadImageToWNFS: (params: UploadParams) => Promise<void> = async ({ image, gallery, fs, notifications, updateNotifications }) => {
-  try {
-    if (!fs) return;
 
+export const uploadImageToWNFS: (image: File) => Promise<void> = async (image) => {
+  const gallery = getRecoil(galleryStore);
+  const fs = getRecoil(filesystemStore);
+  if (!fs) return;
+
+  try {
     const { selectedArea } = gallery;
 
     // Reject files over 5MB
@@ -129,9 +154,9 @@ export const uploadImageToWNFS: (params: UploadParams) => Promise<void> = async 
     // Announce the changes to the server
     await fs.publish();
 
-    addNotification({ notification: { msg: `${image.name} image has been published`, type: 'success'}, notifications, updateNotifications });
+    addNotification({ msg: `${image.name} image has been published`, type: 'success' });
   } catch (error) {
-    addNotification({ notification: { msg: (error as any).message, type: 'error'}, notifications, updateNotifications });
+    addNotification({ msg: (error as any).message, type: 'error' });
   }
 };
 
@@ -139,18 +164,12 @@ export const uploadImageToWNFS: (params: UploadParams) => Promise<void> = async 
  * Delete an image from the user's private or public WNFS
  * @param name
  */
-type DeleteParams = {
-  name: string;
-  gallery: GALLERY;
-  updateGallery: (gallery: GALLERY) => void;
-  fs: FileSystem | null;
-  notifications: Notification[];
-  updateNotifications: (notifications: Notification[]) => void;
-};
-export const deleteImageFromWNFS: (params: DeleteParams) => Promise<void> = async ({ name, gallery, updateGallery, fs, notifications, updateNotifications }) => {
-  try {
-    if (!fs) return;
+export const deleteImageFromWNFS: (name: string) => Promise<void> = async (name) => {
+  const gallery = getRecoil(galleryStore);
+  const fs = getRecoil(filesystemStore);
+  if (!fs) return;
 
+  try {
     const { selectedArea } = gallery;
 
     const imageExists = await fs.exists(
@@ -164,53 +183,32 @@ export const deleteImageFromWNFS: (params: DeleteParams) => Promise<void> = asyn
       // Announce the changes to the server
       await fs.publish();
 
-      addNotification({ notification: { msg: `${name} image has been deleted`, type: 'success' }, notifications, updateNotifications });
+      addNotification({ msg: `${name} image has been deleted`, type: 'success' });
 
       // Refetch images and update galleryStore
-      await getImagesFromWNFS({ gallery, updateGallery, fs });
+      await getImagesFromWNFS();
     } else {
       throw new Error(`${name} image has already been deleted`);
     }
   } catch (error) {
-    addNotification({ notification: { msg: (error as any).message, type: 'error' }, notifications, updateNotifications });
+    addNotification({ msg: (error as any).message, type: 'error' });
   }
 };
 
 /**
  * Handle uploads made by interacting with the file input directly
  */
-type HandleParams = {
-  files: FileList | null;
-  gallery: GALLERY;
-  updateGallery: (gallery: GALLERY) => void;
-  fs: FileSystem | null;
-  notifications: Notification[];
-  updateNotifications: (notifications: Notification[]) => void;
-};
-export const handleFileInput: (params: HandleParams) => Promise<void> = async ({
-  files,
-  gallery,
-  updateGallery,
-  fs,
-  notifications,
-  updateNotifications,
-}) => {
-  if (!files) return
-
-  const contextParams = {
-    gallery,
-    updateGallery,
-    fs,
-    notifications,
-    updateNotifications,
-  };
+export const handleFileInput: (files: FileList | null) => Promise<void> = async (
+  files
+) => {
+  if (!files) return;
 
   await Promise.all(
     Array.from(files).map(async (file) => {
-      await uploadImageToWNFS({ image: file, ...contextParams });
+      await uploadImageToWNFS(file);
     })
   );
 
   // Refetch images and update galleryStore
-  await getImagesFromWNFS(contextParams);
+  await getImagesFromWNFS();
 };

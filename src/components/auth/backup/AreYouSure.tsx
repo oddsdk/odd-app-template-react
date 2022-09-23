@@ -1,19 +1,17 @@
-import { useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+import { useRecoilState } from "recoil";
 
-import FilesystemContext from "../../../contexts/FilesystemContext";
-import SessionContext from "../../../contexts/SessionContext";
-import { setBackupStatus } from '../../../lib/auth/backup'
+import { sessionStore } from '../../../stores';
+import { setBackupStatus } from '../../../lib/auth/backup';
 
 const AreYouSure = () => {
   const navigate = useNavigate();
-  const { fs } = useContext(FilesystemContext);
-  const { session, updateSession } = useContext(SessionContext);
+  const [session, setSession] = useRecoilState(sessionStore);
 
   const handleSkipBackup = () => {
-    setBackupStatus(fs, { created: false });
+    setBackupStatus({ created: false });
 
-    updateSession({
+    setSession({
       ...session,
       backupCreated: false,
     });

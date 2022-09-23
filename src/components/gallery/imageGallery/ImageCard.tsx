@@ -1,4 +1,4 @@
-import type { Image } from '../../../contexts/GalleryContext'
+import type { Image } from '../../../lib/gallery'
 
 type Props = {
   image: Image;

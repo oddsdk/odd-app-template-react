@@ -1,10 +1,11 @@
 import * as webnative from 'webnative';
 import type FileSystem from 'webnative/fs/index';
+import { getRecoil, setRecoil } from "recoil-nexus";
 
+import { filesystemStore, sessionStore } from "../../stores";
 import { asyncDebounce } from '../utils';
 import { getBackupStatus } from './backup';
-import { AREAS, GALLERY_DIRS } from '../../contexts/GalleryContext';
-import { type SESSION } from '../../contexts/SessionContext';
+import { AREAS, GALLERY_DIRS } from '../../lib/gallery';
 
 export const isUsernameValid = async (username: string): Promise<boolean> => {
   return webnative.account.isUsernameValid(username);
@@ -23,25 +24,23 @@ export const isUsernameAvailable = async (
 
 export const register = async (
   username: string,
-  session: SESSION,
-  updateSession: (session: SESSION) => void,
-  updateFilesystem: (filesystem: FileSystem | null) => void,
 ): Promise<boolean> => {
+  const session = getRecoil(sessionStore);
   const { success } = await webnative.account.register({ username });
 
   if (!success) return success;
 
   const fs = await webnative.bootstrapRootFileSystem();
-  updateFilesystem(fs);
+  setRecoil(filesystemStore, fs);
 
   // TODO Remove if only public and private directories are needed
   await initializeFilesystem(fs);
 
-  updateSession({
+  setRecoil(sessionStore, {
     ...session,
     username,
     authed: true,
-  });
+  })
 
   return success;
 };
@@ -56,27 +55,16 @@ const initializeFilesystem = async (fs: FileSystem): Promise<void> => {
   await fs.mkdir(webnative.path.directory(...GALLERY_DIRS[AREAS.PRIVATE]));
 };
 
-type LoadParams = {
-  username: string,
-  session: SESSION,
-  updateSession: (session: SESSION) => void,
-  updateFilesystem: (filesystem: FileSystem | null) => void,
-}
-
-export const loadAccount = async ({
-  username,
-  session,
-  updateSession,
-  updateFilesystem,
-}: LoadParams): Promise<void> => {
+export const loadAccount = async (username:string): Promise<void> => {
+  const session = getRecoil(sessionStore);
   await checkDataRoot(username);
 
   const fs = await webnative.loadRootFileSystem();
-  updateFilesystem(fs);
+  setRecoil(filesystemStore, fs);
 
   const backupStatus = await getBackupStatus(fs);
 
-  updateSession({
+  setRecoil(sessionStore, {
     ...session,
     username,
     authed: true,
