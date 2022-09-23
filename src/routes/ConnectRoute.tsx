@@ -1,16 +1,14 @@
-import type { ConnectView } from '../lib/views'
-import Connect from '../components/auth/connect/Connect'
-import OpenConnectedDevice from '../components/auth/connect/OpenConnectedDevice'
+import { useState } from 'react';
 
-let view: ConnectView = 'connect'
-
-const handleChangeView = (updatedView: ConnectView ) => {
-  view = updatedView;
-};
+import type { ConnectView } from '../lib/views';
+import Connect from '../components/auth/connect/Connect';
+import OpenConnectedDevice from '../components/auth/connect/OpenConnectedDevice';
 
 const ConnectRoute = () => {
+  const [view, setView] = useState<ConnectView>("connect");
+
   if (view === 'connect') {
-    return <Connect changeView={handleChangeView} />;
+    return <Connect changeView={setView} />;
   } else if (view === 'open-connected-device') {
     return <OpenConnectedDevice />;
   }
