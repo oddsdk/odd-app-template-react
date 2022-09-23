@@ -1,46 +1,95 @@
-# Getting Started with Create React App
+# Webnative App Template
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[![Built by FISSION](https://img.shields.io/badge/⌘-Built_by_FISSION-purple.svg)](https://fission.codes) [![Built by FISSION](https://img.shields.io/badge/webnative-v0.34.1-purple.svg)](https://github.com/fission-suite/webnative) [![Discord](https://img.shields.io/discord/478735028319158273.svg)](https://discord.gg/zAQBDEq) [![Discourse](https://img.shields.io/discourse/https/talk.fission.codes/topics)](https://talk.fission.codes)
 
-## Available Scripts
+![Webnative UI Screenshot](static/webnative-ui.png)
 
-In the project directory, you can run:
+The Webnative App Template is a clone-and-go template for building a web application using Webnative, fast. Clone, customize, and deploy to have a running distributed app in mere minutes.
 
-### `npm start`
+## 🤔 What's Webnative?
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+[The Webnative SDK](https://github.com/fission-codes/webnative) empowers developers to build fully distributed web applications without needing a complex back-end. The SDK provides:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- user accounts (via [the browser's Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API)),
+- authorization (using [UCAN](https://ucan.xyz))
+- encrypted file storage (via the [Webnative File System](https://guide.fission.codes/developers/webnative/file-system-wnfs), backed by the [InterPlanetary File System](https://ipfs.io/), or IPFS)
+- and key management (via websockets and a two-factor auth-like flow).
 
-### `npm test`
+Webnative applications work offline and store data encrypted for the user by leveraging the power of the web platform. You can read more about Webnative in Fission's [Webnative Guide](https://guide.fission.codes/developers/webnative).
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 📦 What does this template give me?
 
-### `npm run build`
+### 🥰 Silky-smooth end-user flows
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+The Webnative App Template provides a _silky-smooth user experience_ out of the box. Creating an account and linking a second device feels familiar, comfortable, and obvious. Webnative authentication is key-based rather than password-based, so we've focused heavily on the authentication flows, borrowing language and screens from two-factor auth flows.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 🧱 Built with a modern web stack
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+The app template is built with modern web technologies:
 
-### `npm run eject`
+- SvelteKit (powered by Vite under the hood)
+- TypeScript
+- Tailwind
+- DaisyUI
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### 👩‍🏫 A simple Webnative demo to learn from
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+![WNFS Image Gallery Screenshot](static/wnfs-gallery-screenshot.png)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+The app template includes a functioning application: an image gallery. Check out the image gallery code to learn how a Webnative application handles things like file uploads, directories, etc.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## 🚀 Getting Started
 
-## Learn More
+You can try out the template yourself [here](https://webnative.netlify.app/).
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Ready? Let's go:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. Clone the repository:
+
+   ```shell
+   git clone git@github.com:webnative-examples/webnative-app-template-react.git
+   ```
+
+2. Install the dependencies.
+
+   ```shell
+   npm install
+   ```
+
+3. Start the local development server.
+
+   ```shell
+   npm run start
+   ```
+
+4. Navigate to `http://localhost:3000` in your web browser.
+
+## 🧨 Deploy
+
+The [Webnative App Template demo](https://webnative.netlify.app) is currently hosted on Netlify, but it should be supported on any static hosting platform (Vercel, Cloudflare Pages, etc).
+
+### Fission App Hosting
+
+Coming soon!
+
+_You can't currently deploy to Fission's app hosting infrastructure._ SvelteKit Single-Page Applications require redirects in order to support routing. Redirects are not currently supported by IPFS, so the [Fission Publish GitHub action](https://github.com/fission-codes/publish-action) is not yet supported.
+
+There is [work underway to extend IPFS http gateways to support redirects](https://github.com/ipfs/kubo/pull/8890). Once that is merged, deploying to Fission will work.
+
+### Netlify
+
+In order to deploy your Webnative application on Netlify:
+
+1. Create a new Netlify site and connect your app's git repository. (If you don't have your application stored in a git repository, you can upload the output of a [static build](#static-build).)
+2. Netlify takes care of the rest. No Netlify-specific configuration is needed.
+3. There is no step 3.
+
+### Static Build
+
+Export a static build.
+
+```shell
+npm run build
+```
+
+The build outputs the static site to the `build` directory.

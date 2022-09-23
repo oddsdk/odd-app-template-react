@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom'
 import type { account } from 'webnative'
 
@@ -12,36 +12,39 @@ import type { LinkDeviceView } from '../lib/views'
 import FilesystemActivity from '../components/common/FilesystemActivity'
 import LinkDevice from '../components/auth/link-device/LinkDevice'
 
-let view: LinkDeviceView = 'link-device'
-
-let accountLinkingConsumer: account.AccountLinkingConsumer
-let displayPin: string = ''
-
 const useQuery = () => {
   const { search } = useLocation();
 
   return useMemo(() => new URLSearchParams(search), [search]);
 };
 
+let accountLinkingConsumer: account.AccountLinkingConsumer;
+
 const LinkDeviceRoute = () => {
   const navigate = useNavigate();
   const { updateFilesystem } = useContext(FilesystemContext)
   const notificationsContext = useContext(NotificationsContext)
   const sessionContext = useContext(SessionContext)
+  const [view, setView] = useState<LinkDeviceView>('link-device');
+  const [displayPin, setDisplayPin] = useState<string>('');
+  // const [accountLinkingConsumer, setAccountLinkingConsumer] =
+  //   useState<account.AccountLinkingConsumer>();
+
 
   let query = useQuery();
   const username = query.get('username') as string;
 
   const initAccountLinkingConsumer = async () => {
-    accountLinkingConsumer = await createAccountLinkingConsumer(username);
+    const accountLinkingConsumer = await createAccountLinkingConsumer(username);
+    // setAccountLinkingConsumer(updatedAccountLinkingConsumer)
 
-    accountLinkingConsumer.on('challenge', ({ pin }) => {
-      displayPin = pin.join('');
+    accountLinkingConsumer?.on('challenge', ({ pin }) => {
+      setDisplayPin(pin.join(''));
     });
 
-    accountLinkingConsumer.on('link', async ({ approved, username }) => {
+    accountLinkingConsumer?.on('link', async ({ approved, username }) => {
       if (approved) {
-        view = 'load-filesystem';
+        setView('load-filesystem');
 
         await loadAccount({ username, updateFilesystem, ...sessionContext });
 
@@ -77,10 +80,10 @@ const LinkDeviceRoute = () => {
         className="modal-toggle"
       />
 
-      {view === "link-device" && (
+      {view === 'link-device' && (
         <LinkDevice pin={displayPin} cancelConnection={cancelConnection} />
       )}
-      {view === "load-filesystem" && <FilesystemActivity activity="Loading" />}
+      {view === 'load-filesystem' && <FilesystemActivity activity="Loading" />}
     </>
   );
 };

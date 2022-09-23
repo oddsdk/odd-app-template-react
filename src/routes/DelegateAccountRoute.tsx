@@ -11,16 +11,7 @@ import ThemeContext, { THEME } from '../contexts/ThemeContext';
 import { getBackupStatus, setBackupStatus } from '../lib/auth/backup'
 import ConnectBackupDevice from '../components/auth/delegate-account/ConnectBackupDevice'
 import DelegateAccount from '../components/auth/delegate-account/DelegateAccount'
-
 import type { DelegateAccountView } from '../lib/views'
-
-let view: DelegateAccountView = 'connect-backup-device'
-
-let pin: number[]
-let pinInput = ''
-let pinError = false
-let confirmPin = () => {}
-let rejectPin = () => {}
 
 const DelegateAccountRoute = () => {
   const navigate = useNavigate();
@@ -31,17 +22,26 @@ const DelegateAccountRoute = () => {
   const { theme } = useContext(ThemeContext);
   const [backupCreated, setBackupCreated] = useState(true);
   const [connectionLink, setConnectionLink] = useState('')
+  const [view, setView] = useState<DelegateAccountView>(
+    'connect-backup-device'
+  );
   const [qrcode, setQrcode] = useState('')
+  const [pin, setPin] = useState<number[]>();
+  const [pinInput] = useState('');
+  const [pinError, setPinError] = useState(false);
+  const [confirmPin, setConfirmPin] = useState<() => void>(() => {});
+  const [rejectPin, setRejectPin] = useState<() => void>(() => {});
 
   const initAccountLinkingProducer = async (username: string) => {
     const accountLinkingProducer = await createAccountLinkingProducer(username)
 
     accountLinkingProducer.on('challenge', detail => {
-      pin = detail.pin
-      confirmPin = detail.confirmPin
-      rejectPin = detail.rejectPin
+      console.log('detail', detail)
+      setPin(detail.pin)
+      setConfirmPin(detail.confirmPin);
+      setRejectPin(detail.rejectPin);
 
-      view = 'delegate-account'
+      setView('delegate-account')
     })
 
     accountLinkingProducer.on('link', async ({ approved }) => {
@@ -78,10 +78,10 @@ const DelegateAccountRoute = () => {
   };
 
   const checkPin = () => {
-    if (pin.join('') === pinInput) {
+    if (pin?.join('') === pinInput) {
       confirmPin();
     } else {
-      pinError = true;
+      setPinError(true);
     }
   };
 
@@ -113,6 +113,10 @@ const DelegateAccountRoute = () => {
         initAccountLinkingProducer(username)
       }
     }, []);
+
+  useEffect(() => {
+    console.log("view", view);
+  })
 
   useMountEffect()
 
