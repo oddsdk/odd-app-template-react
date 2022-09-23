@@ -32,14 +32,15 @@ const ImageGallery = () => {
 
   useEffect(() => {
     // If galleryStore.selectedArea changes from private to public, re-run getImagesFromWNFS
-    if (selectedArea !== gallery.selectedArea) {
+    if (!gallery.loading && (selectedArea !== gallery.selectedArea)) {
       const refetchImages = async () => {
         setSelectedArea(gallery.selectedArea);
         await getImagesFromWNFS({ gallery, updateGallery, fs });
-      }
+      };
       refetchImages();
     }
-  }, [gallery.selectedArea, selectedArea, fs, gallery, updateGallery])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedArea])
 
   const useMountEffect = () =>
     useEffect(() => {
