@@ -115,6 +115,7 @@ const ImageModal = ({ image, isModalOpen, onClose }: Props) => {
           id={`image-modal-${selectedImage.cid}`}
           className="modal-toggle"
           checked={openModal}
+          onChange={() => {}}
         />
         <label
           htmlFor={`image-modal-${selectedImage.cid}`}
