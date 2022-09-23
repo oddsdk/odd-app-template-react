@@ -1,13 +1,13 @@
-import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilValue } from "recoil";
 
 import { appName } from '../lib/app-info';
-import SessionContext from '../contexts/SessionContext';
+import { sessionStore } from '../stores';
 import Shield from '../components/icons/Shield';
 
 const HomeRoute = () => {
   const navigate = useNavigate();
-  const { session } = useContext(SessionContext);
+  const session = useRecoilValue(sessionStore);
 
   return (
     <>

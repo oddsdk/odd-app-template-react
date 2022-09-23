@@ -1,11 +1,11 @@
-import { useContext } from 'react';
+import { useRecoilValue } from "recoil";
 
-import { appName } from '../../../lib/app-info'
-import SessionContext from '../../../contexts/SessionContext';
+import { appName } from '../../../lib/app-info';
+import { sessionStore } from '../../../stores';
 import WelcomeCheckIcon from '../../icons/WelcomeCheckIcon'
 
 const Welcome = () => {
-  const { session } = useContext(SessionContext);
+  const session = useRecoilValue(sessionStore);
 
   return (
     <>

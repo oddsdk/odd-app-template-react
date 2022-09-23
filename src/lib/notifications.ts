@@ -1,33 +1,47 @@
-import { type Notification, NotificationType } from '../contexts/NotificationsContext';
+import { getRecoil, setRecoil } from "recoil-nexus";
 
-type RemoveProps = {
-  id: string;
-  notifications: Notification[];
-  updateNotifications: (notifications: Notification[]) => void;
+import { notificationStore } from "../stores";
+
+export type Notification = {
+  id?: string;
+  msg?: string;
+  type?: NotificationType;
+  timeout?: number;
 };
-export const removeNotification: (params: RemoveProps) => void = ({ id, notifications, updateNotifications }) => {
-  updateNotifications(
-    notifications.filter((notification) => notification.id !== id)
+
+export type NotificationType = "success" | "error" | "info" | "warning";
+
+/**
+ * Remove a notification from the store using its id
+ * @param id
+ */
+export const removeNotification: (id: string) => void = (id) => {
+  const notifications = getRecoil(notificationStore);
+
+  setRecoil(
+    notificationStore, notifications.filter(
+      (notification: Notification) => notification.id !== id
+    )
   );
 };
 
-type AddProps = {
-  notification: {
-    msg: string;
-    type?: NotificationType;
-    timeout?: number;
-  };
-  notifications: Notification[];
-  updateNotifications: (notifications: Notification[]) => void;
-};
-export const addNotification: (params: AddProps) => void = ({ notification, notifications, updateNotifications }) => {
-  const { msg, type = 'info', timeout = 5000 } = notification;
+/**
+ * Add a new notification to the bottom of the list
+ * @param notification
+ * @returns id
+ */
+export const addNotification: (notification: Notification) => void = ({
+  msg,
+  type = "info",
+  timeout = 5000,
+}) => {
+  const notifications = getRecoil(notificationStore);
 
   // uuid for each notification
   const id = crypto.randomUUID();
 
   // adding new notifications to the bottom of the list so they stack from bottom to top
-  updateNotifications([
+  setRecoil(notificationStore,[
     ...notifications,
     {
       id,
@@ -39,7 +53,7 @@ export const addNotification: (params: AddProps) => void = ({ notification, noti
 
   // removing the notification after a specified timeout
   const timer = setTimeout(() => {
-    removeNotification({ id, notifications, updateNotifications });
+    removeNotification(id);
     clearTimeout(timer);
   }, timeout);
 

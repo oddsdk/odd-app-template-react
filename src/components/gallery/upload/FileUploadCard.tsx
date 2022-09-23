@@ -1,16 +1,12 @@
-import { useContext } from 'react';
+import { useRecoilValue } from 'recoil';
 
-import FilesystemContext from '../../../contexts/FilesystemContext';
-import GalleryContext from '../../../contexts/GalleryContext';
-import NotificationsContext from '../../../contexts/NotificationsContext';
+import { galleryStore } from '../../../stores';
 import { handleFileInput } from '../../../lib/gallery';
 import FileUploadIcon from '../../icons/FileUploadIcon';
 import LoadingSpinner from '../../common/LoadingSpinner';
 
 const FileUploadCard = () => {
-  const { fs } = useContext(FilesystemContext);
-  const { gallery, updateGallery } = useContext(GalleryContext);
-  const notificationsContext = useContext(NotificationsContext);
+  const gallery = useRecoilValue(galleryStore);
 
   return (
     <div className="flex flex-wrap w-1/2 sm:w-1/4 lg:w-1/6">
@@ -33,13 +29,7 @@ const FileUploadCard = () => {
             </div>
             <input
               onChange={(e) =>
-                handleFileInput({
-                  files: e.target.files,
-                  gallery,
-                  updateGallery,
-                  fs,
-                  ...notificationsContext,
-                })
+                handleFileInput(e.target.files)
               }
               id="upload-file"
               type="file"

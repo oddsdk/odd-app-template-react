@@ -1,10 +1,11 @@
-import { useContext } from 'react';
-import SessionContext from '../contexts/SessionContext';
+import { useRecoilValue } from 'recoil';
+
+import { sessionStore } from '../stores';
 import Register from '../components/auth/register/Register'
 import Welcome from '../components/auth/register/Welcome'
 
 const RegisterRoute = () => {
-  const { session } = useContext(SessionContext);
+  const session = useRecoilValue(sessionStore);
 
   if (session.authed) {
    return <Welcome />;

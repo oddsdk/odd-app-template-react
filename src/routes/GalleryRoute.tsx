@@ -1,24 +1,25 @@
-import { useContext, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useRecoilState, useRecoilValue } from "recoil";
 
-import GalleryContext, { AREAS } from "../contexts/GalleryContext";
-import ThemeContext, { THEME } from '../contexts/ThemeContext'
-import SessionContext from '../contexts/SessionContext'
-import Dropzone from '../components/gallery/upload/Dropzone'
-import ImageGallery from '../components/gallery/imageGallery/ImageGallery'
+import { galleryStore, sessionStore, themeStore } from '../stores';
+import { AREAS } from "../lib/gallery";
+import { THEME } from '../lib/theme';
+import Dropzone from '../components/gallery/upload/Dropzone';
+import ImageGallery from '../components/gallery/imageGallery/ImageGallery';
 
 const GalleryRoute = () => {
   const navigate = useNavigate();
-  const { gallery, updateGallery } = useContext(GalleryContext);
-  const { session } = useContext(SessionContext);
-  const { theme } = useContext(ThemeContext);
+  const [gallery, setGallery] = useRecoilState(galleryStore);
+  const session = useRecoilValue(sessionStore);
+  const theme = useRecoilValue(themeStore);
 
   /**
    * Tab between the public/private areas and load associated images
    * @param area
    */
   const handleChangeTab: (area: AREAS) => void = (area) =>
-    updateGallery({
+    setGallery({
       ...gallery,
       selectedArea: area,
     });

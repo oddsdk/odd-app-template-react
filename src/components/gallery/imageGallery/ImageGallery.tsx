@@ -1,15 +1,14 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
 
-import FilesystemContext from '../../../contexts/FilesystemContext';
-import GalleryContext, { AREAS, type Image} from "../../../contexts/GalleryContext";
-import { getImagesFromWNFS } from '../../../lib/gallery';
+import { galleryStore } from "../../../stores";
+import { getImagesFromWNFS, AREAS, type Image } from "../../../lib/gallery";
 import FileUploadCard from '../upload/FileUploadCard';
 import ImageCard from './ImageCard';
 import ImageModal from './ImageModal';
 
 const ImageGallery = () => {
-  const { fs } = useContext(FilesystemContext);
-  const { gallery, updateGallery } = useContext(GalleryContext);
+  const gallery = useRecoilValue(galleryStore);
 
   const [selectedArea, setSelectedArea] = useState<string | null>(
     gallery.selectedArea
@@ -35,7 +34,7 @@ const ImageGallery = () => {
     if (!gallery.loading && (selectedArea !== gallery.selectedArea)) {
       const refetchImages = async () => {
         setSelectedArea(gallery.selectedArea);
-        await getImagesFromWNFS({ gallery, updateGallery, fs });
+        await getImagesFromWNFS();
       };
       refetchImages();
     }
@@ -45,7 +44,7 @@ const ImageGallery = () => {
   const useMountEffect = () =>
     useEffect(() => {
       // Get images from the user's public WNFS
-      getImagesFromWNFS({ gallery, updateGallery, fs });
+      getImagesFromWNFS();
     }, []);
 
   useMountEffect();

@@ -1,25 +1,22 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useRecoilState, useRecoilValue } from "recoil";
 import QRCode from 'qrcode-svg'
 
-import { addNotification } from '../lib/notifications'
-import { createAccountLinkingProducer } from '../lib/auth/linking'
-import FilesystemContext from '../contexts/FilesystemContext';
-import NotificationsContext from '../contexts/NotificationsContext';
-import SessionContext from '../contexts/SessionContext';
-import ThemeContext, { THEME } from '../contexts/ThemeContext';
-import { getBackupStatus, setBackupStatus } from '../lib/auth/backup'
-import ConnectBackupDevice from '../components/auth/delegate-account/ConnectBackupDevice'
-import DelegateAccount from '../components/auth/delegate-account/DelegateAccount'
-import type { DelegateAccountView } from '../lib/views'
+import { filesystemStore, sessionStore, themeStore } from '../stores';
+import { addNotification } from '../lib/notifications';
+import { createAccountLinkingProducer } from '../lib/auth/linking';
+import { THEME } from '../lib/theme';
+import { getBackupStatus, setBackupStatus } from '../lib/auth/backup';
+import ConnectBackupDevice from '../components/auth/delegate-account/ConnectBackupDevice';
+import DelegateAccount from '../components/auth/delegate-account/DelegateAccount';
+import type { DelegateAccountView } from '../lib/views';
 
 const DelegateAccountRoute = () => {
   const navigate = useNavigate();
-  const { fs } = useContext(FilesystemContext);
-  const { notifications, updateNotifications } =
-    useContext(NotificationsContext);
-  const { session, updateSession } = useContext(SessionContext);
-  const { theme } = useContext(ThemeContext);
+  const fs = useRecoilValue(filesystemStore);
+  const [session, setSession] = useRecoilState(sessionStore);
+  const theme = useRecoilValue(themeStore);
   const [backupCreated, setBackupCreated] = useState(true);
   const [connectionLink, setConnectionLink] = useState('')
   const [view, setView] = useState<DelegateAccountView>(
@@ -36,7 +33,6 @@ const DelegateAccountRoute = () => {
     const accountLinkingProducer = await createAccountLinkingProducer(username)
 
     accountLinkingProducer.on('challenge', detail => {
-      console.log('detail', detail)
       setPin(detail.pin)
       setConfirmPin(detail.confirmPin);
       setRejectPin(detail.rejectPin);
@@ -46,25 +42,18 @@ const DelegateAccountRoute = () => {
 
     accountLinkingProducer.on('link', async ({ approved }) => {
       if (approved) {
-        updateSession({
+        setSession({
           ...session,
-          backupCreated: true
-        })
+          backupCreated: true,
+        });
 
         if (fs) {
-          await setBackupStatus(fs, { created: true })
+          await setBackupStatus({ created: true })
 
-          addNotification({ notification: { msg: 'You\'ve connected a backup device!', type: 'success' }, notifications, updateNotifications })
+          addNotification({ msg: 'You\'ve connected a backup device!', type: 'success' })
           navigate('/')
         } else {
-          addNotification({
-            notification: {
-              msg: 'Missing filesystem. Unable to create a backup device.',
-              type: 'error',
-            },
-            notifications,
-            updateNotifications,
-          })
+          addNotification({ msg: 'Missing filesystem. Unable to create a backup device.', type: 'error' })
         }
       }
     })
@@ -73,7 +62,7 @@ const DelegateAccountRoute = () => {
   const cancelConnection = () => {
     rejectPin();
 
-    addNotification({ notification: { msg: 'The connection attempt was cancelled', type: 'info' }, notifications, updateNotifications })
+    addNotification({ msg: 'The connection attempt was cancelled', type: 'info' })
     navigate('/');
   };
 
@@ -113,10 +102,6 @@ const DelegateAccountRoute = () => {
         initAccountLinkingProducer(username)
       }
     }, []);
-
-  useEffect(() => {
-    console.log("view", view);
-  })
 
   useMountEffect()
 

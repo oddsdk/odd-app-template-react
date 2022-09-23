@@ -1,16 +1,18 @@
-import { useContext  } from 'react';
+import { useRecoilValue } from "recoil";
 
-import NotificationsContext from '../../contexts/NotificationsContext';
+import { notificationStore } from '../../stores';
+// import { type Notification } from '../../lib/notifications';
 import Notification from './Notification'
 
 const Notifications = () => {
-  const { notifications } = useContext(NotificationsContext);
+  const notifications = useRecoilValue(notificationStore);
 
   if (notifications.length) {
     return (
       <div className="fixed z-50 right-6 bottom-6 flex flex-col justify-center">
         {notifications.map((notification, index) => (
           <div key={index}>
+            {/* @ts-ignore */}
             <Notification notification={notification} />
           </div>
         ))}

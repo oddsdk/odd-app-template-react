@@ -1,15 +1,9 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useRecoilValue } from "recoil";
 
-import { deleteImageFromWNFS } from '../../../lib/gallery';
-import FilesystemContext from '../../../contexts/FilesystemContext';
-import NotificationsContext from '../../../contexts/NotificationsContext';
-import GalleryContext, { type Image } from "../../../contexts/GalleryContext";
+import { galleryStore } from '../../../stores';
+import { deleteImageFromWNFS, type Image } from '../../../lib/gallery';
 import { fissionServerUrl } from '../../../lib/app-info';
-
-let previousImage: Image | null
-let nextImage: Image | null
-let showPreviousArrow: boolean
-let showNextArrow: boolean
 
 type Props = {
   image: Image;
@@ -18,11 +12,13 @@ type Props = {
 };
 
 const ImageModal = ({ image, isModalOpen, onClose }: Props) => {
-  const { fs } = useContext(FilesystemContext);
-  const { gallery, updateGallery } = useContext(GalleryContext);
-  const notificationsContext = useContext(NotificationsContext);
+  const gallery = useRecoilValue(galleryStore);
   const [selectedImage, setSelectedImage] = useState<Image | null>(image)
-  const [openModal, setOpenModal] = useState(isModalOpen);
+  const [openModal, setOpenModal] = useState<boolean>(isModalOpen);
+  const [previousImage, setPreviousImage] = useState<Image | null>();
+  const [nextImage, setNextImage] = useState<Image | null>();
+  const [showPreviousArrow, setShowPreviousArrow] = useState<boolean>();
+  const [showNextArrow, setShowNextArrow] = useState<boolean>();
 
   /**
    * Close the modal, clear the image state vars, set `isModalOpen` to false
@@ -30,8 +26,8 @@ const ImageModal = ({ image, isModalOpen, onClose }: Props) => {
    */
   const handleCloseModal: () => void = useCallback(() => {
     setSelectedImage(null);
-    previousImage = null;
-    nextImage = null;
+    setPreviousImage(null);
+    setNextImage(null);
     setOpenModal(false);
     onClose();
   }, [onClose]);
@@ -41,13 +37,7 @@ const ImageModal = ({ image, isModalOpen, onClose }: Props) => {
    */
   const handleDeleteImage: () => Promise<void> = async () => {
     if (selectedImage) {
-      await deleteImageFromWNFS({
-        name: selectedImage.name,
-        gallery,
-        updateGallery,
-        fs,
-        ...notificationsContext,
-      });
+      await deleteImageFromWNFS(selectedImage.name);
       handleCloseModal();
     }
   };
@@ -62,18 +52,15 @@ const ImageModal = ({ image, isModalOpen, onClose }: Props) => {
     const currentIndex = imageList.findIndex(
       (val) => val.cid === selectedImage?.cid
     );
-    previousImage =
+    const updatedPreviousImage =
       imageList[currentIndex - 1] ?? imageList[imageList.length - 1];
-    nextImage = imageList[currentIndex + 1] ?? imageList[0];
+    setPreviousImage(updatedPreviousImage);
+    const updatedNextImage = imageList[currentIndex + 1] ?? imageList[0];
+    setNextImage(updatedNextImage);
 
-    showPreviousArrow = imageList.length > 1 && !!previousImage;
-    showNextArrow = imageList.length > 1 && !!nextImage;
-  }, [
-    gallery.privateImages,
-    gallery.publicImages,
-    selectedImage?.cid,
-    selectedImage?.private,
-  ]);
+    setShowPreviousArrow(imageList.length > 1 && !!updatedPreviousImage);
+    setShowNextArrow(imageList.length > 1 && !!updatedNextImage);
+  }, [gallery.privateImages, gallery.publicImages, selectedImage?.cid, selectedImage?.private]);
 
   /**
    * Load the correct image when a user clicks the Next or Previous arrows
@@ -82,10 +69,11 @@ const ImageModal = ({ image, isModalOpen, onClose }: Props) => {
   const handleNextOrPrevImage: (direction: 'next' | 'prev') => void =
     useCallback(
       (direction) => {
+        // @ts-ignore-next-line
         setSelectedImage(direction === 'prev' ? previousImage : nextImage);
         setCarouselState();
       },
-      [setCarouselState]
+      [nextImage, previousImage, setCarouselState]
     );
 
   /**
@@ -101,7 +89,7 @@ const ImageModal = ({ image, isModalOpen, onClose }: Props) => {
 
     if (showPreviousArrow && event.key === 'ArrowLeft')
       handleNextOrPrevImage('prev');
-  }, [handleNextOrPrevImage, handleCloseModal]);
+  }, [handleCloseModal, showNextArrow, handleNextOrPrevImage, showPreviousArrow]);
 
   // Attach attach left/right/esc keys to modal actions
   useEffect(() => {
