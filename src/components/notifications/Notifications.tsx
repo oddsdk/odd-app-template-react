@@ -1,7 +1,7 @@
 import { useRecoilValue } from "recoil";
+import { animated, Transition } from "react-spring";
 
 import { notificationStore } from '../../stores';
-// import { type Notification } from '../../lib/notifications';
 import Notification from './Notification'
 
 const Notifications = () => {
@@ -10,12 +10,16 @@ const Notifications = () => {
   if (notifications.length) {
     return (
       <div className="fixed z-50 right-6 bottom-6 flex flex-col justify-center">
-        {notifications.map((notification, index) => (
-          <div key={index}>
-            {/* @ts-ignore */}
-            <Notification notification={notification} />
-          </div>
-        ))}
+        <Transition
+          items={notifications}
+          from={{ opacity: 0 }}
+          enter={{ opacity: 1 }}
+          leave={{ opacity: 0 }}
+        >
+          {(styles, notification) =>
+            notification && <animated.div style={styles}><Notification notification={notification} /></animated.div>
+          }
+        </Transition>
       </div>
     );
   }

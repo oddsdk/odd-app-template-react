@@ -1,7 +1,7 @@
 import { useRecoilValue } from "recoil";
 
 import { themeStore } from '../../stores';
-import { THEME} from '../../lib/theme';
+import { THEME } from '../../lib/theme';
 import type { Notification } from '../../lib/notifications';
 import CheckThinIcon from '../icons/CheckThinIcon';
 import XThinIcon from '../icons/XThinIcon';
@@ -30,7 +30,9 @@ const NotificationComp = ({ notification }: Props) => {
             />
           )}
           {notification.type === "error" && (
-            <XThinIcon color={theme === THEME.LIGHT ? "#ffd6d7" : "#fec3c3"} />
+            <XThinIcon
+              color={theme === THEME.LIGHT ? "#ffd6d7" : "#fec3c3"}
+            />
           )}
           <span className="pl-1">{notification.msg}</span>
         </div>
