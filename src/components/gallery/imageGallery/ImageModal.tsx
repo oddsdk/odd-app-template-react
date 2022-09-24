@@ -69,8 +69,7 @@ const ImageModal = ({ image, isModalOpen, onClose }: Props) => {
   const handleNextOrPrevImage: (direction: 'next' | 'prev') => void =
     useCallback(
       (direction) => {
-        // @ts-ignore-next-line
-        setSelectedImage(direction === 'prev' ? previousImage : nextImage);
+        setSelectedImage((direction === 'prev' ? previousImage : nextImage) ?? null);
         setCarouselState();
       },
       [nextImage, previousImage, setCarouselState]
@@ -107,7 +106,7 @@ const ImageModal = ({ image, isModalOpen, onClose }: Props) => {
 
   useMountEffect();
 
-  if (!!selectedImage) {
+  if (selectedImage) {
     return (
       <>
         <input
@@ -115,7 +114,7 @@ const ImageModal = ({ image, isModalOpen, onClose }: Props) => {
           id={`image-modal-${selectedImage.cid}`}
           className="modal-toggle"
           checked={openModal}
-          onChange={() => {}}
+          onChange={() => undefined}
         />
         <label
           htmlFor={`image-modal-${selectedImage.cid}`}
