@@ -12,7 +12,7 @@ import Backup from "./routes/BackupRoute";
 import Connect from './routes/ConnectRoute';
 import DelegateAccount from './routes/DelegateAccountRoute';
 import LinkDevice from './routes/LinkDeviceRoute';
-import Gallery from './routes/GalleryRoute';
+import Gallery from './routes/gallery/GalleryRoute';
 import Register from './routes/RegisterRoute';
 
 const App = () => {

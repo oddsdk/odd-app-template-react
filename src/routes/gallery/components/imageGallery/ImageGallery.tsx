@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 
-import { galleryStore } from "../../../stores";
-import { getImagesFromWNFS, AREAS, type Image } from "../../../lib/gallery";
-import FileUploadCard from '../upload/FileUploadCard';
-import ImageCard from './ImageCard';
-import ImageModal from './ImageModal';
+import { AREAS, galleryStore } from "../../stores";
+import { getImagesFromWNFS, type Image } from "../../lib/gallery";
+import FileUploadCard from "../upload/FileUploadCard";
+import ImageCard from "./ImageCard";
+import ImageModal from "./ImageModal";
 
 const ImageGallery = () => {
   const gallery = useRecoilValue(galleryStore);
@@ -31,15 +31,15 @@ const ImageGallery = () => {
 
   useEffect(() => {
     // If galleryStore.selectedArea changes from private to public, re-run getImagesFromWNFS
-    if (!gallery.loading && (selectedArea !== gallery.selectedArea)) {
+    if (!gallery.loading && selectedArea !== gallery.selectedArea) {
       const refetchImages = async () => {
         setSelectedArea(gallery.selectedArea);
         await getImagesFromWNFS();
       };
       refetchImages();
     }
-  // eslint-disable-next-line
-  }, [selectedArea])
+    // eslint-disable-next-line
+  }, [selectedArea]);
 
   const useMountEffect = () =>
     useEffect(() => {

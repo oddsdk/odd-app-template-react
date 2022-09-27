@@ -1,14 +1,14 @@
-import * as uint8arrays from 'uint8arrays';
-import * as wn from 'webnative';
+import * as uint8arrays from "uint8arrays";
+import * as wn from "webnative";
 import { getRecoil, setRecoil } from "recoil-nexus";
+import type FileSystem from "webnative/fs/index";
+import type { CID } from "multiformats/cid";
+import type { PuttableUnixTree, File as WNFile } from "webnative/fs/types";
+import type { Metadata } from "webnative/fs/metadata";
 
-import { filesystemStore, galleryStore } from '../stores';
-import { addNotification } from '../lib/notifications';
-
-export enum AREAS {
-  PUBLIC = "PUBLIC",
-  PRIVATE = "PRIVATE",
-}
+import { filesystemStore } from "../../../stores";
+import { galleryStore, AREAS } from "../stores";
+import { addNotification } from "../../../lib/notifications";
 
 export type Image = {
   cid: string;
@@ -26,6 +26,19 @@ export type GALLERY = {
   loading: boolean;
 };
 
+interface GalleryFile extends PuttableUnixTree, WNFile {
+  cid: CID;
+  content: Uint8Array;
+  header: {
+    content: Uint8Array;
+    metadata: Metadata;
+  };
+}
+
+type Link = {
+  size: number;
+};
+
 export const GALLERY_DIRS: {
   [key: string]: string[];
 } = {
@@ -33,26 +46,48 @@ export const GALLERY_DIRS: {
   [AREAS.PRIVATE]: ["private", "gallery"],
 };
 
-export const initialGallery: GALLERY = {
-  loading: true,
-  publicImages: [],
-  privateImages: [],
-  selectedArea: AREAS.PUBLIC,
-};
-
-
 const FILE_SIZE_LIMIT = 5;
+let fsCheckCompleted = false;
+
+/**
+ * Create additional directories and files needed by the gallery if they don't exist
+ *
+ * @param fs FileSystem
+ */
+
+const initializeFilesystem = async (fs: FileSystem): Promise<void> => {
+  const publicPathExists = await fs.exists(
+    wn.path.file(...GALLERY_DIRS[AREAS.PUBLIC])
+  );
+  const privatePathExists = await fs.exists(
+    wn.path.file(...GALLERY_DIRS[AREAS.PRIVATE])
+  );
+
+  if (!publicPathExists) {
+    await fs.mkdir(wn.path.directory(...GALLERY_DIRS[AREAS.PUBLIC]));
+  }
+
+  if (!privatePathExists) {
+    await fs.mkdir(wn.path.directory(...GALLERY_DIRS[AREAS.PRIVATE]));
+  }
+
+  fsCheckCompleted = true
+};
 
 /**
  * Get images from the user's WNFS and construct the `src` value for the images
  */
 
 export const getImagesFromWNFS: () => Promise<void> = async () => {
-  const gallery = getRecoil(galleryStore)
+  const gallery = getRecoil(galleryStore);
   const fs = getRecoil(filesystemStore);
-  if (!fs) return
+  if (!fs) return;
 
   try {
+    if (!fsCheckCompleted) {
+      await initializeFilesystem(fs);
+    }
+
     // Set loading: true on the galleryStore
     setRecoil(galleryStore, { ...gallery, loading: true });
 
@@ -74,21 +109,21 @@ export const getImagesFromWNFS: () => Promise<void> = async () => {
         // The CID for private files is currently located in `file.header.content`,
         // whereas the CID for public files is located in `file.cid`
         const cid = isPrivate
-          ? (file as any)?.header.content.toString()
-          : (file as any)?.cid.toString();
+          ? (file as GalleryFile)?.header.content.toString()
+          : (file as GalleryFile)?.cid.toString();
 
         // Create a base64 string to use as the image `src`
         const src = `data:image/jpeg;base64, ${uint8arrays.toString(
-          (file as any)?.content,
+          (file as GalleryFile)?.content,
           "base64"
         )}`;
 
         return {
           cid,
-          ctime: (file as any)?.header.metadata.unixMeta.ctime,
+          ctime: (file as GalleryFile)?.header.metadata.unixMeta.ctime,
           name,
           private: isPrivate,
-          size: (links[name] as any).size,
+          size: (links[name] as Link).size,
           src,
         };
       })
@@ -123,7 +158,9 @@ export const getImagesFromWNFS: () => Promise<void> = async () => {
  * @param image
  */
 
-export const uploadImageToWNFS: (image: File) => Promise<void> = async (image) => {
+export const uploadImageToWNFS: (image: File) => Promise<void> = async (
+  image
+) => {
   const gallery = getRecoil(galleryStore);
   const fs = getRecoil(filesystemStore);
   if (!fs) return;
@@ -154,9 +191,12 @@ export const uploadImageToWNFS: (image: File) => Promise<void> = async (image) =
     // Announce the changes to the server
     await fs.publish();
 
-    addNotification({ msg: `${image.name} image has been published`, type: 'success' });
+    addNotification({
+      msg: `${image.name} image has been published`,
+      type: "success",
+    });
   } catch (error) {
-    addNotification({ msg: (error as any).message, type: 'error' });
+    addNotification({ msg: (error as Error).message, type: "error" });
   }
 };
 
@@ -164,7 +204,9 @@ export const uploadImageToWNFS: (image: File) => Promise<void> = async (image) =
  * Delete an image from the user's private or public WNFS
  * @param name
  */
-export const deleteImageFromWNFS: (name: string) => Promise<void> = async (name) => {
+export const deleteImageFromWNFS: (name: string) => Promise<void> = async (
+  name
+) => {
   const gallery = getRecoil(galleryStore);
   const fs = getRecoil(filesystemStore);
   if (!fs) return;
@@ -183,7 +225,10 @@ export const deleteImageFromWNFS: (name: string) => Promise<void> = async (name)
       // Announce the changes to the server
       await fs.publish();
 
-      addNotification({ msg: `${name} image has been deleted`, type: 'success' });
+      addNotification({
+        msg: `${name} image has been deleted`,
+        type: "success",
+      });
 
       // Refetch images and update galleryStore
       await getImagesFromWNFS();
@@ -191,16 +236,16 @@ export const deleteImageFromWNFS: (name: string) => Promise<void> = async (name)
       throw new Error(`${name} image has already been deleted`);
     }
   } catch (error) {
-    addNotification({ msg: (error as any).message, type: 'error' });
+    addNotification({ msg: (error as Error).message, type: "error" });
   }
 };
 
 /**
  * Handle uploads made by interacting with the file input directly
  */
-export const handleFileInput: (files: FileList | null) => Promise<void> = async (
-  files
-) => {
+export const handleFileInput: (
+  files: FileList | null
+) => Promise<void> = async (files) => {
   if (!files) return;
 
   await Promise.all(

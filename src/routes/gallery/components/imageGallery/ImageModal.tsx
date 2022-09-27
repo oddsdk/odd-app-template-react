@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 
-import { galleryStore } from '../../../stores';
-import { deleteImageFromWNFS, type Image } from '../../../lib/gallery';
-import { fissionServerUrl } from '../../../lib/app-info';
+import { galleryStore } from "../../stores";
+import { deleteImageFromWNFS, type Image } from "../../lib/gallery";
+import { fissionServerUrl } from "../../../../lib/app-info";
 
 type Props = {
   image: Image;
@@ -13,7 +13,7 @@ type Props = {
 
 const ImageModal = ({ image, isModalOpen, onClose }: Props) => {
   const gallery = useRecoilValue(galleryStore);
-  const [selectedImage, setSelectedImage] = useState<Image | null>(image)
+  const [selectedImage, setSelectedImage] = useState<Image | null>(image);
   const [openModal, setOpenModal] = useState<boolean>(isModalOpen);
   const [previousImage, setPreviousImage] = useState<Image | null>();
   const [nextImage, setNextImage] = useState<Image | null>();
@@ -24,13 +24,13 @@ const ImageModal = ({ image, isModalOpen, onClose }: Props) => {
    * Close the modal, clear the image state vars, set `isModalOpen` to false
    * and dispatch the close event to clear the image from the parent's state
    */
-  const handleCloseModal: () => void = useCallback(() => {
-    setSelectedImage(null);
+  const handleCloseModal: () => void = () => {
     setPreviousImage(null);
     setNextImage(null);
+    setSelectedImage(null);
     setOpenModal(false);
     onClose();
-  }, [onClose]);
+  }
 
   /**
    * Delete an image from the user's WNFS
@@ -45,7 +45,7 @@ const ImageModal = ({ image, isModalOpen, onClose }: Props) => {
   /**
    * Set the previous and next images to be toggled to when the arrows are clicked
    */
-  const setCarouselState = useCallback(() => {
+  const setCarouselState = () => {
     const imageList = selectedImage?.private
       ? gallery.privateImages
       : gallery.publicImages;
@@ -60,42 +60,42 @@ const ImageModal = ({ image, isModalOpen, onClose }: Props) => {
 
     setShowPreviousArrow(imageList.length > 1 && !!updatedPreviousImage);
     setShowNextArrow(imageList.length > 1 && !!updatedNextImage);
-  }, [gallery.privateImages, gallery.publicImages, selectedImage?.cid, selectedImage?.private]);
+  }
 
   /**
    * Load the correct image when a user clicks the Next or Previous arrows
    * @param direction
    */
-  const handleNextOrPrevImage: (direction: 'next' | 'prev') => void =
-    useCallback(
-      (direction) => {
-        setSelectedImage((direction === 'prev' ? previousImage : nextImage) ?? null);
-        setCarouselState();
-      },
-      [nextImage, previousImage, setCarouselState]
+  const handleNextOrPrevImage: (direction: "next" | "prev") => void = (direction) => {
+    setSelectedImage(
+      (direction === "prev" ? previousImage : nextImage) ?? null,
     );
+  }
+  useEffect(() => {
+    setCarouselState();
+  }, [selectedImage])
 
   /**
    * Detect `Escape` key presses to close the modal or `ArrowRight`/`ArrowLeft`
    * presses to navigate the carousel
    * @param event
    */
-  const handleKeyDown: (event: KeyboardEvent) => void = useCallback(event => {
-    if (event.key === 'Escape') handleCloseModal();
+  const handleKeyDown: (event: KeyboardEvent) => void = (event) => {
+    if (event.key === "Escape") handleCloseModal();
 
-    if (showNextArrow && event.key === 'ArrowRight')
-      handleNextOrPrevImage('next');
+    if (showNextArrow && event.key === "ArrowRight")
+      handleNextOrPrevImage("next");
 
-    if (showPreviousArrow && event.key === 'ArrowLeft')
-      handleNextOrPrevImage('prev');
-  }, [handleCloseModal, showNextArrow, handleNextOrPrevImage, showPreviousArrow]);
+    if (showPreviousArrow && event.key === "ArrowLeft")
+      handleNextOrPrevImage("prev");
+  }
 
   // Attach attach left/right/esc keys to modal actions
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [handleKeyDown]);
 
@@ -119,7 +119,13 @@ const ImageModal = ({ image, isModalOpen, onClose }: Props) => {
         <label
           htmlFor={`image-modal-${selectedImage.cid}`}
           className="modal cursor-pointer z-50"
-          onClick={handleCloseModal}
+          onClick={(event) => {
+            if (event.currentTarget != event.target) {
+              return
+            }
+
+            handleCloseModal();
+          }}
         >
           <div className="modal-box relative text-center text-base-content border dark:border-slate-600">
             <label
@@ -149,7 +155,10 @@ const ImageModal = ({ image, isModalOpen, onClose }: Props) => {
                 {showNextArrow && (
                   <button
                     className="absolute top-1/2 -right-[25px] -translate-y-1/2 inline-block text-center text-[40px]"
-                    onClick={() => handleNextOrPrevImage("next")}
+                    onClick={() => {
+                      console.log('clicked')
+                      handleNextOrPrevImage("next")
+                    }}
                   >
                     &#8250;
                   </button>
@@ -194,4 +203,3 @@ const ImageModal = ({ image, isModalOpen, onClose }: Props) => {
 };
 
 export default ImageModal;
-

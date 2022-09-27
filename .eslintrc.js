@@ -1,4 +1,5 @@
-const eslintrc = {
+// eslint-disable-next-line no-undef
+module.exports = {
   env: {
     browser: true,
     es2021: true,
@@ -20,5 +21,3 @@ const eslintrc = {
     "react/react-in-jsx-scope": "off",
   },
 };
-
-export default eslintrc;
