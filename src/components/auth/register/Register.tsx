@@ -10,7 +10,7 @@ import CheckIcon from '../../icons/CheckIcon'
 import XIcon from '../../icons/XIcon'
 import FilesystemActivity from '../../common/FilesystemActivity'
 
-let username: string = ''
+let username = ''
 let usernameValid = true
 let usernameAvailable = true
 let registrationSuccess = true
@@ -158,7 +158,7 @@ const Register = () => {
                 className="label mt-1 hidden peer-checked:block"
               >
                 <span className="label-text-alt text-error text-left">
-                  For security reasons, {appName} doesn't support shared
+                  For security reasons, {appName} doesn&apos;t support shared
                   computers at this time.
                 </span>
               </label>

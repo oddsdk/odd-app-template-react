@@ -46,7 +46,7 @@ const AreYouSure = () => {
               className="text-error underline block mt-4 cursor-pointer"
               onClick={handleSkipBackup}
             >
-              YOLO&mdash;I'll risk just one device for now
+              YOLO&mdash;I&apos;ll risk just one device for now
             </span>
           </div>
         </div>

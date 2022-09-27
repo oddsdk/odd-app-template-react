@@ -9,11 +9,14 @@ const Welcome = () => {
 
   return (
     <>
-      <input type="checkbox" id="link-device-modal" defaultChecked className="modal-toggle" />
+      <input
+        type="checkbox"
+        id="link-device-modal"
+        defaultChecked
+        className="modal-toggle"
+      />
       <div className="modal">
-        <div
-          className="modal-box w-80 relative text-center dark:border-slate-600 dark:border"
-        >
+        <div className="modal-box w-80 relative text-center dark:border-slate-600 dark:border">
           <div>
             <h3 className="mb-7 text-xl font-serif">
               Welcome, {session.username}!
@@ -27,21 +30,27 @@ const Welcome = () => {
               <p className="mt-8 mb-4">Your account has been created.</p>
 
               <div className="mb-8">
-                <input type="checkbox" id="password-message" className="peer hidden" />
+                <input
+                  type="checkbox"
+                  id="password-message"
+                  className="peer hidden"
+                />
                 <label
                   className="text-primary underline mb-8 hover:cursor-pointer peer-checked:hidden"
                   htmlFor="password-message"
                 >
-                  Wait&mdash;what's my password?
+                  Wait&mdash;what&apos;s my password?
                 </label>
                 <p className="hidden peer-checked:block">
-                  You don't need a password! <br />
-                  {appName} uses public key cryptography to authenticate you with this
-                  device.
+                  You don&apos;t need a password! <br />
+                  {appName} uses public key cryptography to authenticate you
+                  with this device.
                 </p>
               </div>
 
-              <a className="btn btn-primary" href="/backup">Continue</a>
+              <a className="btn btn-primary" href="/backup">
+                Continue
+              </a>
             </div>
           </div>
         </div>
