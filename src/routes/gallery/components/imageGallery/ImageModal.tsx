@@ -155,10 +155,7 @@ const ImageModal = ({ image, isModalOpen, onClose }: Props) => {
                 {showNextArrow && (
                   <button
                     className="absolute top-1/2 -right-[25px] -translate-y-1/2 inline-block text-center text-[40px]"
-                    onClick={() => {
-                      console.log('clicked')
-                      handleNextOrPrevImage("next")
-                    }}
+                    onClick={() => handleNextOrPrevImage("next")}
                   >
                     &#8250;
                   </button>
