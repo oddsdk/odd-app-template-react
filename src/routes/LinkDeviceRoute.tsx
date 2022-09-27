@@ -25,7 +25,7 @@ const LinkDeviceRoute = () => {
   //   useState<account.AccountLinkingConsumer>();
 
 
-  let query = useQuery();
+  const query = useQuery();
   const username = query.get('username') as string;
 
   const initAccountLinkingConsumer = async () => {

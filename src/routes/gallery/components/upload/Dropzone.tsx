@@ -1,7 +1,7 @@
-import { DragEvent, ReactNode, useState } from 'react';
+import { DragEvent, ReactNode, useState } from "react";
 
-import { addNotification } from '../../../lib/notifications'
-import { getImagesFromWNFS, uploadImageToWNFS } from '../../../lib/gallery'
+import { addNotification } from "../../../../lib/notifications";
+import { getImagesFromWNFS, uploadImageToWNFS } from "../../lib/gallery";
 
 /**
  * This is needed to prevent the default behaviour of the file opening in browser
@@ -13,7 +13,7 @@ const handleDragOver: (event: DragEvent<HTMLLabelElement>) => void = (event) =>
 
 type Props = {
   children: ReactNode;
-}
+};
 
 const Dropzone = ({ children }: Props) => {
   const [isDragging, setIsDragging] = useState(false);
@@ -44,7 +44,10 @@ const Dropzone = ({ children }: Props) => {
 
           // If the dropped files aren't images, we don't want them!
           if (!file.type.match("image/*")) {
-            addNotification({ msg: "Please upload images only", type: "error" });
+            addNotification({
+              msg: "Please upload images only",
+              type: "error",
+            });
           } else {
             await uploadImageToWNFS(file);
           }

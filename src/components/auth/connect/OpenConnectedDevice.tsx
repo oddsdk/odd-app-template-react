@@ -17,12 +17,12 @@ const OpenConnectDevice = () => (
           </h3>
           <div>
             <p className="text-sm mb-3">
-              To connect with an existing account, you'll need a device that's
-              already connected to that account.
+              To connect with an existing account, you&apos;ll need a device
+              that&apos;s already connected to that account.
             </p>
             <p className="text-sm">
-              On that device, click "Connect a new device" and follow the
-              instuctions.
+              On that device, click &quot;Connect a new device&quot; and follow
+              the instuctions.
             </p>
           </div>
         </div>

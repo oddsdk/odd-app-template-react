@@ -26,8 +26,8 @@ const DelegateAccountRoute = () => {
   const [pin, setPin] = useState<number[]>();
   const [pinInput] = useState('');
   const [pinError, setPinError] = useState(false);
-  const [confirmPin, setConfirmPin] = useState<() => void>(() => {});
-  const [rejectPin, setRejectPin] = useState<() => void>(() => {});
+  const [confirmPin, setConfirmPin] = useState<() => void>(() => undefined);
+  const [rejectPin, setRejectPin] = useState<() => void>(() => undefined);
 
   const initAccountLinkingProducer = async (username: string) => {
     const accountLinkingProducer = await createAccountLinkingProducer(username)

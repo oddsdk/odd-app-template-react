@@ -1,11 +1,9 @@
 import * as webnative from 'webnative';
-import type FileSystem from 'webnative/fs/index';
 import { getRecoil, setRecoil } from "recoil-nexus";
 
 import { filesystemStore, sessionStore } from "../../stores";
 import { asyncDebounce } from '../utils';
 import { getBackupStatus } from './backup';
-import { AREAS, GALLERY_DIRS } from '../../lib/gallery';
 
 export const isUsernameValid = async (username: string): Promise<boolean> => {
   return webnative.account.isUsernameValid(username);
@@ -33,9 +31,6 @@ export const register = async (
   const fs = await webnative.bootstrapRootFileSystem();
   setRecoil(filesystemStore, fs);
 
-  // TODO Remove if only public and private directories are needed
-  await initializeFilesystem(fs);
-
   setRecoil(sessionStore, {
     ...session,
     username,
@@ -43,16 +38,6 @@ export const register = async (
   })
 
   return success;
-};
-
-/**
- * Create additional directories and files needed by the app
- *
- * @param fs FileSystem
- */
-const initializeFilesystem = async (fs: FileSystem): Promise<void> => {
-  await fs.mkdir(webnative.path.directory(...GALLERY_DIRS[AREAS.PUBLIC]));
-  await fs.mkdir(webnative.path.directory(...GALLERY_DIRS[AREAS.PRIVATE]));
 };
 
 export const loadAccount = async (username:string): Promise<void> => {

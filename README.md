@@ -72,7 +72,7 @@ The [Webnative App Template demo](https://webnative.netlify.app) is currently ho
 
 Coming soon!
 
-_You can't currently deploy to Fission's app hosting infrastructure._ SvelteKit Single-Page Applications require redirects in order to support routing. Redirects are not currently supported by IPFS, so the [Fission Publish GitHub action](https://github.com/fission-codes/publish-action) is not yet supported.
+_You can't currently deploy to Fission's app hosting infrastructure._ React Single-Page Applications require redirects in order to support routing. Redirects are not currently supported by IPFS, so the [Fission Publish GitHub action](https://github.com/fission-codes/publish-action) is not yet supported.
 
 There is [work underway to extend IPFS http gateways to support redirects](https://github.com/ipfs/kubo/pull/8890). Once that is merged, deploying to Fission will work.
 

@@ -1,4 +1,8 @@
-const FileUploadIcon = ({ classes = 'mb-3 w-10 h-10' }) => (
+type Props = {
+  classes?: string
+}
+
+const FileUploadIcon = ({ classes = 'mb-3 w-10 h-10' }: Props) => (
   <svg
     aria-hidden="true"
     className={classes}

@@ -1,9 +1,9 @@
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue } from "recoil";
 
-import { galleryStore } from '../../../stores';
-import { handleFileInput } from '../../../lib/gallery';
-import FileUploadIcon from '../../icons/FileUploadIcon';
-import LoadingSpinner from '../../common/LoadingSpinner';
+import { galleryStore } from "../../stores";
+import { handleFileInput } from "../../lib/gallery";
+import FileUploadIcon from "../../../../components/icons/FileUploadIcon";
+import LoadingSpinner from "../../../../components/common/LoadingSpinner";
 
 const FileUploadCard = () => {
   const gallery = useRecoilValue(galleryStore);
@@ -28,9 +28,7 @@ const FileUploadCard = () => {
               <p className="text-xs">SVG, PNG, JPG or GIF</p>
             </div>
             <input
-              onChange={(e) =>
-                handleFileInput(e.target.files)
-              }
+              onChange={(e) => handleFileInput(e.target.files)}
               id="upload-file"
               type="file"
               multiple

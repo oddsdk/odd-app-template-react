@@ -2,11 +2,11 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useRecoilState, useRecoilValue } from "recoil";
 
-import { galleryStore, sessionStore, themeStore } from '../stores';
-import { AREAS } from "../lib/gallery";
-import { THEME } from '../lib/theme';
-import Dropzone from '../components/gallery/upload/Dropzone';
-import ImageGallery from '../components/gallery/imageGallery/ImageGallery';
+import { sessionStore, themeStore } from '../../stores';
+import { AREAS, galleryStore } from "./stores";
+import { THEME } from '../../lib/theme';
+import Dropzone from './components/upload/Dropzone';
+import ImageGallery from './components/imageGallery/ImageGallery';
 
 const GalleryRoute = () => {
   const navigate = useNavigate();

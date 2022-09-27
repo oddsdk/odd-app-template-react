@@ -11,7 +11,7 @@ const useQuery = () => {
 }
 
 const BackupRoute = () => {
-  let query = useQuery();
+  const query = useQuery();
   const [view, setView] = useState(query.get('view') ?? 'backup');
 
   const handleChangeView = (updatedView: BackupView) => {
