@@ -39,7 +39,7 @@ const ImageGallery = () => {
       refetchImages();
     }
     // eslint-disable-next-line
-  }, [selectedArea]);
+  }, [gallery.selectedArea, selectedArea]);
 
   const useMountEffect = () =>
     useEffect(() => {

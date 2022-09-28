@@ -34,7 +34,7 @@ The app template is built with modern web technologies:
 
 ### 👩‍🏫 A simple Webnative demo to learn from
 
-![WNFS Image Gallery Screenshot](static/wnfs-gallery-screenshot.png)
+![WNFS Image Gallery Screenshot](public/wnfs-gallery-screenshot.png)
 
 The app template includes a functioning application: an image gallery. Check out the image gallery code to learn how a Webnative application handles things like file uploads, directories, etc.
 
