@@ -22,7 +22,7 @@
     "webnative": "^0.34.2"
   },
   "scripts": {
-    "dev": "GENERATE_SOURCEMAP=false react-app-rewired start",
+    "dev": "GENERATE_SOURCEMAP=false PORT=4000 react-app-rewired start",
     "build": "GENERATE_SOURCEMAP=false react-app-rewired build",
     "eject": "react-scripts eject"
   },

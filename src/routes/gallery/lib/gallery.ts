@@ -47,7 +47,6 @@ export const GALLERY_DIRS: {
 };
 
 const FILE_SIZE_LIMIT = 5;
-let fsCheckCompleted = false;
 
 /**
  * Create additional directories and files needed by the gallery if they don't exist
@@ -55,7 +54,7 @@ let fsCheckCompleted = false;
  * @param fs FileSystem
  */
 
-const initializeFilesystem = async (fs: FileSystem): Promise<void> => {
+export const initializeFilesystem = async (fs: FileSystem): Promise<void> => {
   const publicPathExists = await fs.exists(
     wn.path.file(...GALLERY_DIRS[AREAS.PUBLIC])
   );
@@ -70,8 +69,6 @@ const initializeFilesystem = async (fs: FileSystem): Promise<void> => {
   if (!privatePathExists) {
     await fs.mkdir(wn.path.directory(...GALLERY_DIRS[AREAS.PRIVATE]));
   }
-
-  fsCheckCompleted = true
 };
 
 /**
@@ -84,10 +81,6 @@ export const getImagesFromWNFS: () => Promise<void> = async () => {
   if (!fs) return;
 
   try {
-    if (!fsCheckCompleted) {
-      await initializeFilesystem(fs);
-    }
-
     // Set loading: true on the galleryStore
     setRecoil(galleryStore, { ...gallery, loading: true });
 

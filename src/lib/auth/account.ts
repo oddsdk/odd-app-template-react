@@ -2,6 +2,7 @@ import * as webnative from 'webnative';
 import { getRecoil, setRecoil } from "recoil-nexus";
 
 import { filesystemStore, sessionStore } from "../../stores";
+import { initializeFilesystem } from "../../routes/gallery/lib/gallery"
 import { asyncDebounce } from '../utils';
 import { getBackupStatus } from './backup';
 
@@ -31,11 +32,14 @@ export const register = async (
   const fs = await webnative.bootstrapRootFileSystem();
   setRecoil(filesystemStore, fs);
 
+  // TODO Remove if only public and private directories are needed
+  await initializeFilesystem(fs);
+
   setRecoil(sessionStore, {
     ...session,
     username,
     authed: true,
-  })
+  });
 
   return success;
 };
