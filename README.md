@@ -27,7 +27,7 @@ The Webnative App Template provides a _silky-smooth user experience_ out of the 
 
 The app template is built with modern web technologies:
 
-- SvelteKit (powered by Vite under the hood)
+- React
 - TypeScript
 - Tailwind
 - DaisyUI
