@@ -13,7 +13,7 @@ module.exports = {
           secondary: "#30aadd",
           accent: "#00ffc6",
           neutral: "#282828",
-          info: "#bfdbfe",
+          info: "#93c5fd",
           success: "#22c55e",
           warning: "#fdba74",
           error: "#ef4444",
@@ -32,7 +32,7 @@ module.exports = {
           neutral: "#e5e5e5",
           info: "#bfdbfe",
           success: "#15803d",
-          warning: "#fdba74",
+          warning: "#fed7aa",
           error: "#b91c1c",
           "base-content": "#0f172a", // Base text content color
           "base-100": "#f8fafc", // Base background color
@@ -54,8 +54,8 @@ module.exports = {
     extend: {
       keyframes: {
         fadeInUp: {
-          'from': { opacity: 0, translate3d: '(0, 100%, 0)' },
-          'to': { opacity: 1, translate3d: '(0, 0, 0)' },
+          from: { opacity: 0, translate3d: "(0, 100%, 0)" },
+          to: { opacity: 1, translate3d: "(0, 0, 0)" },
         },
       },
     },

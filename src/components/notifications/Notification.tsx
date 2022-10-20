@@ -1,9 +1,10 @@
 import { useRecoilValue } from "recoil";
 
 import { themeStore } from '../../stores';
-import { THEME } from '../../lib/theme';
 import type { Notification } from '../../lib/notifications';
 import CheckThinIcon from '../icons/CheckThinIcon';
+import InfoThinIcon from '../icons/InfoThinIcon';
+import WarningThinIcon from '../icons/WarningThinIcon';
 import XThinIcon from '../icons/XThinIcon';
 
 type Props = {
@@ -12,6 +13,39 @@ type Props = {
 
 const NotificationComp = ({ notification }: Props) => {
   const theme = useRecoilValue(themeStore);
+
+  if (!notification?.type) {
+    return null;
+  }
+
+  const iconMap = {
+    info: {
+      component: InfoThinIcon,
+      props: {
+        color: "#1e3a8a",
+      },
+    },
+    error: {
+      component: XThinIcon,
+      props: {
+        color: theme === "light" ? "#ffd6d7" : "#fec3c3",
+      },
+    },
+    success: {
+      component: CheckThinIcon,
+      props: {
+        color: theme === "light" ? "#b8ffd3" : "#002e12",
+      },
+    },
+    warning: {
+      component: WarningThinIcon,
+      props: {
+        color: "#7c2d12",
+      },
+    },
+  };
+
+  const IconComponent = iconMap[notification.type].component;
 
   return (
     <div
@@ -24,16 +58,7 @@ const NotificationComp = ({ notification }: Props) => {
         className={`alert alert-${notification.type} text-sm mb-3 peer-last:mb-0`}
       >
         <div>
-          {notification.type === "success" && (
-            <CheckThinIcon
-              color={theme === THEME.LIGHT ? "#b8ffd3" : "#002e12"}
-            />
-          )}
-          {notification.type === "error" && (
-            <XThinIcon
-              color={theme === THEME.LIGHT ? "#ffd6d7" : "#fec3c3"}
-            />
-          )}
+          <IconComponent {...iconMap[notification.type].props} />
           <span className="pl-1">{notification.msg}</span>
         </div>
       </div>
