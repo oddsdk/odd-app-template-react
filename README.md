@@ -148,7 +148,7 @@ See the [Fission Guide](https://guide.fission.codes/developers/installation) and
 
 ### Netlify
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/7b7418ef-86eb-43c4-a668-0118568c7f46/deploy-status)](https://app.netlify.com/sites/webnative/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/7b7418ef-86eb-43c4-a668-0118568c7f46/deploy-status)](https://app.netlify.com/sites/webnative-app-template-react/deploys)
 
 In order to deploy your Webnative application on Netlify:
 
