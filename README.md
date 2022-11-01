@@ -54,7 +54,7 @@ Prerequiste: ensure you are running Node 16.14 or greater, but _not_ Node 17 (18
 1. Clone the repository:
 
    ```shell
-   git clone git@github.com:webnative-examples/webnative-app-template.git
+   git clone git@github.com:webnative-examples/webnative-app-template-react.git
    ```
 
 2. Install the dependencies.
