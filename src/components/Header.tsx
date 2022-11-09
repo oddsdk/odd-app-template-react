@@ -74,7 +74,7 @@ const Header = () => {
         {!session.loading && session.authed && !session.backupCreated && (
           <span
             onClick={() => navigate("/delegate-account")}
-            className="btn btn-sm h-10 btn-warning rounded-full bg-orange-300 border-2 border-neutral font-semiBold text-neutral transition-colors ease-in hover:bg-orange-300"
+            className="btn btn-sm h-10 btn-warning rounded-full bg-orange-300 border-2 border-neutral font-medium text-neutral transition-colors ease-in hover:bg-orange-300"
           >
             <span className="mr-2">Backup recommended</span>
             <Shield />
