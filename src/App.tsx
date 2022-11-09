@@ -17,6 +17,7 @@ import LinkDevice from './routes/LinkDeviceRoute';
 import Gallery from './routes/gallery/GalleryRoute';
 import Register from './routes/RegisterRoute';
 import Settings from './routes/SettingsRoute';
+import NotFound from './routes/NotFoundRoute';
 
 const App = () => {
   const theme = useRecoilValue(themeStore);
@@ -45,7 +46,7 @@ const App = () => {
               <Route path="/about" element={<About />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/" element={<Home />} />
-              <Route path="*" element={<Home />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
         </SidebarNav>
