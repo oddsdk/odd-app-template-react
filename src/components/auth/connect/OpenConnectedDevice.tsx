@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const OpenConnectDevice = () => (
   <>
     <input
@@ -8,9 +10,9 @@ const OpenConnectDevice = () => (
     />
     <div className="modal">
       <div className="modal-box w-96 sm:w-wideModal relative text-center">
-        <a href="/" className="btn btn-xs btn-circle absolute right-2 top-2">
+        <Link to="/" className="btn btn-xs btn-circle absolute right-2 top-2">
           ✕
-        </a>
+        </Link>
         <div>
           <h3 className="mb-8 text-base">Connect your existing account</h3>
           <div>
