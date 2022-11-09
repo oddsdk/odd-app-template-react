@@ -9,7 +9,7 @@ const Notifications = () => {
 
   if (notifications.length) {
     return (
-      <div className="fixed z-50 right-6 bottom-6 flex flex-col justify-center">
+      <div className="fixed z-max right-4 bottom-8 flex flex-col justify-center">
         <Transition
           items={notifications}
           from={{ opacity: 0 }}
@@ -17,7 +17,11 @@ const Notifications = () => {
           leave={{ opacity: 0 }}
         >
           {(styles, notification) =>
-            notification && <animated.div style={styles}><Notification notification={notification} /></animated.div>
+            notification && (
+              <animated.div style={styles}>
+                <Notification notification={notification} />
+              </animated.div>
+            )
           }
         </Transition>
       </div>

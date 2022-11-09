@@ -2,9 +2,8 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useRecoilState, useRecoilValue } from "recoil";
 
-import { sessionStore, themeStore } from '../../stores';
+import { sessionStore } from '../../stores';
 import { AREAS, galleryStore } from "./stores";
-import { THEME } from '../../lib/theme';
 import Dropzone from './components/upload/Dropzone';
 import ImageGallery from './components/imageGallery/ImageGallery';
 
@@ -12,7 +11,6 @@ const GalleryRoute = () => {
   const navigate = useNavigate();
   const [gallery, setGallery] = useRecoilState(galleryStore);
   const session = useRecoilValue(sessionStore);
-  const theme = useRecoilValue(themeStore);
 
   /**
    * Tab between the public/private areas and load associated images
@@ -32,22 +30,20 @@ const GalleryRoute = () => {
   }, [session, navigate])
 
   return (
-    <div className="p-2 text-center">
+    <div className="p-2 mb-14 text-center">
       {session.authed && (
         <>
-          <div className="flex mb-4">
-            <div
-              className={`tabs tabs-boxed w-fit border ${
-                theme === THEME.LIGHT ? 'button-transparent' : 'border-primary'
-              }`}
-            >
+          <div className="flex items-center justify-center translate-y-1/2 w-fit m-auto">
+            <div className="tabs border-2 overflow-hidden border-base-content rounded-lg">
               {Object.keys(AREAS).map((area, index) => (
                 <button
                   key={index}
                   onClick={() => handleChangeTab(AREAS[area as AREAS])}
-                  className={`tab ${gallery.selectedArea === AREAS[area as AREAS]
-                    ? 'tab-active'
-                    : 'hover:text-primary'} ease-in`}
+                  className={`tab h-10 font-bold text-sm ease-in ${
+                    gallery.selectedArea === AREAS[area as AREAS]
+                      ? "tab-active bg-base-content text-base-100"
+                      : "bg-base-100 text-base-content"
+                  } ease-in`}
                 >
                   {`${AREAS[area as AREAS].charAt(0).toUpperCase()}${AREAS[
                     area as AREAS

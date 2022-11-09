@@ -1,4 +1,4 @@
-const InfoThinIcon = ({ color }: { color: string}) => (
+const InfoThinIcon = ({ color }: { color: string }) => (
   <svg
     width="36"
     height="36"

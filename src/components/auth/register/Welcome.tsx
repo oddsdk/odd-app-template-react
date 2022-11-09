@@ -1,4 +1,5 @@
 import { useRecoilValue } from "recoil";
+import { Link } from "react-router-dom";
 
 import { appName } from '../../../lib/app-info';
 import { sessionStore } from '../../../stores';
@@ -12,24 +13,20 @@ const Welcome = () => {
       <input
         type="checkbox"
         id="link-device-modal"
-        defaultChecked
+        checked
         className="modal-toggle"
       />
       <div className="modal">
-        <div className="modal-box w-80 relative text-center dark:border-slate-600 dark:border">
+        <div className="modal-box w-narrowModal relative text-center">
           <div>
-            <h3 className="mb-7 text-xl font-serif">
-              Welcome, {session.username}!
-            </h3>
-            <div className="flex justify-center">
-              <span>
-                <WelcomeCheckIcon />
-              </span>
+            <h3 className="mb-14 text-base">Welcome, {session.username}!</h3>
+            <div className="flex justify-center mb-11 text-base-content">
+              <WelcomeCheckIcon />
             </div>
             <div>
-              <p className="mt-8 mb-4">Your account has been created.</p>
+              <p className="mb-4 text-left">Your account has been created.</p>
 
-              <div className="mb-8">
+              <div className="mb-8 text-left">
                 <input
                   type="checkbox"
                   id="password-message"
@@ -39,18 +36,18 @@ const Welcome = () => {
                   className="text-primary underline mb-8 hover:cursor-pointer peer-checked:hidden"
                   htmlFor="password-message"
                 >
-                  Wait&mdash;what&apos;s my password?
+                  Wait&mdash;what&#39;s my password?
                 </label>
                 <p className="hidden peer-checked:block">
-                  You don&apos;t need a password! <br />
+                  You don&#39;t need a password! <br />
                   {appName} uses public key cryptography to authenticate you
                   with this device.
                 </p>
               </div>
 
-              <a className="btn btn-primary" href="/backup">
+              <Link className="btn btn-primary" to="/backup">
                 Continue
-              </a>
+              </Link>
             </div>
           </div>
         </div>

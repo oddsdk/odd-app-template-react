@@ -1,15 +1,16 @@
 import { useRecoilValue } from "recoil";
 
-import { themeStore } from '../../stores';
-import type { Notification } from '../../lib/notifications';
-import CheckThinIcon from '../icons/CheckThinIcon';
-import InfoThinIcon from '../icons/InfoThinIcon';
-import WarningThinIcon from '../icons/WarningThinIcon';
-import XThinIcon from '../icons/XThinIcon';
+import { themeStore } from "../../stores";
+import { THEME } from "../../lib/theme";
+import type { Notification } from "../../lib/notifications";
+import CheckThinIcon from "../icons/CheckThinIcon";
+import InfoThinIcon from "../icons/InfoThinIcon";
+import WarningThinIcon from "../icons/WarningThinIcon";
+import XThinIcon from "../icons/XThinIcon";
 
 type Props = {
   notification: Notification;
-}
+};
 
 const NotificationComp = ({ notification }: Props) => {
   const theme = useRecoilValue(themeStore);
@@ -28,13 +29,13 @@ const NotificationComp = ({ notification }: Props) => {
     error: {
       component: XThinIcon,
       props: {
-        color: theme === "light" ? "#ffd6d7" : "#fec3c3",
+        color: theme === THEME.LIGHT ? "#ffd6d7" : "#fec3c3",
       },
     },
     success: {
       component: CheckThinIcon,
       props: {
-        color: theme === "light" ? "#b8ffd3" : "#002e12",
+        color: "#14532D",
       },
     },
     warning: {

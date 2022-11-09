@@ -3,7 +3,7 @@ import { useRecoilValue } from "recoil";
 
 import { galleryStore } from "../../stores";
 import { deleteImageFromWNFS, type Image } from "../../lib/gallery";
-import { fissionServerUrl } from "../../../../lib/app-info";
+import { ipfsGatewayUrl } from "../../../../lib/app-info";
 
 type Props = {
   image: Image;
@@ -121,22 +121,22 @@ const ImageModal = ({ image, isModalOpen, onClose }: Props) => {
           className="modal cursor-pointer z-50"
           onClick={(event) => {
             if (event.currentTarget != event.target) {
-              return
+              return;
             }
 
             handleCloseModal();
           }}
         >
-          <div className="modal-box relative text-center text-base-content border dark:border-slate-600">
+          <div className="modal-box relative text-center text-base-content">
             <label
               htmlFor={`image-modal-${selectedImage.cid}`}
-              className="btn btn-xs btn-circle absolute right-2 top-2 dark:bg-slate-600"
+              className="btn btn-xs btn-circle absolute right-2 top-2"
               onClick={handleCloseModal}
             >
               ✕
             </label>
             <div>
-              <h3 className="mb-7 text-xl font-serif">{selectedImage.name}</h3>
+              <h3 className="mb-7 text-lg break-all">{selectedImage.name}</h3>
 
               <div className="relative">
                 {showPreviousArrow && (
@@ -148,7 +148,7 @@ const ImageModal = ({ image, isModalOpen, onClose }: Props) => {
                   </button>
                 )}
                 <img
-                  className="block object-cover object-center w-full h-full mb-4 rounded-[1rem]"
+                  className="block object-cover object-center border-2 border-base-content w-full h-full mb-4 rounded-[1rem]"
                   alt={selectedImage.name}
                   src={selectedImage.src}
                 />
@@ -163,7 +163,7 @@ const ImageModal = ({ image, isModalOpen, onClose }: Props) => {
               </div>
               <div className="flex flex-col items-center justify-center">
                 <a
-                  href={`https://ipfs.${fissionServerUrl}/ipfs/${selectedImage.cid}/userland`}
+                  href={`https://ipfs.${ipfsGatewayUrl}/ipfs/${selectedImage.cid}/userland`}
                   target="_blank"
                   rel="noreferrer"
                   className="underline mb-4 hover:text-slate-500"
@@ -182,7 +182,7 @@ const ImageModal = ({ image, isModalOpen, onClose }: Props) => {
                     Download Image
                   </a>
                   <button
-                    className="btn bg-error text-white"
+                    className="btn btn-outline"
                     onClick={handleDeleteImage}
                   >
                     Delete Image

@@ -17,30 +17,30 @@ const Backup = ({ changeView  }: Props) => {
       <input
         type="checkbox"
         id="backup-modal"
-        defaultChecked
+        checked
         className="modal-toggle"
       />
       <div className="modal">
-        <div className="modal-box w-80 relative text-center dark:border-slate-600 dark:border">
+        <div className="modal-box w-narrowModal relative text-center">
           <div id="backup-message" className="peer-checked:hidden">
-            <h3 className="mb-7 text-xl font-serif">Backup your account</h3>
-            <p className="mt-8 mb-4">
+            <h3 className="mb-8 text-base">Backup your account</h3>
+            <p className="mb-5 text-left">
               Your {appName} account & its data live only on your devices.
             </p>
 
-            <p className="mt-8 mb-4">
-              We highly recommend connecting your account on at least one more
-              device, so that you have a backup.
+            <p className="mb-8 text-left">
+              We highly recommend backing up your account on at least one
+              additional device.
             </p>
 
             <button
               className="btn btn-primary"
-              onClick={() => navigate('/delegate-account')}
+              onClick={() => navigate("/delegate-account")}
             >
               Connect a backup device
             </button>
             <button
-              className="btn btn-xs btn-link text-base font-normal underline mt-4"
+              className="btn btn-xs btn-link text-sm underline mt-4"
               onClick={handleChangeView}
             >
               Skip for now

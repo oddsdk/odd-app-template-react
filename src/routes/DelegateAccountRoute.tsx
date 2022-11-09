@@ -94,8 +94,11 @@ const DelegateAccountRoute = () => {
         setQrcode(
           new QRCode({
             content: updatedConnectionLink,
-            color: theme === THEME.LIGHT ? "#334155" : "#E2E8F0",
-            background: "#ffffff00",
+            color: theme === THEME.LIGHT ? "#171717" : "#FAFAFA",
+            background: theme === THEME.LIGHT ? "#FAFAFA" : "#171717",
+            padding: 0,
+            width: 216,
+            height: 216,
           }).svg()
         );
 
