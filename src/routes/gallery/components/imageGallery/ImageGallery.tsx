@@ -51,8 +51,8 @@ const ImageGallery = () => {
 
   return (
     <section className="overflow-hidden text-gray-700">
-      <div className="p-4 mx-auto">
-        <div className="flex flex-wrap -m-1 md:-m-2">
+      <div className="pt-8 p-6 md:p-8 mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:lg:grid-cols-6 gap-4">
           <FileUploadCard />
           {selectedGallery?.map((image: Image, index) => (
             <ImageCard key={index} image={image} openModal={handleOpenModal} />

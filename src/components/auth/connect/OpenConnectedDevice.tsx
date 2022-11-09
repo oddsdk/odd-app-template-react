@@ -3,26 +3,24 @@ const OpenConnectDevice = () => (
     <input
       type="checkbox"
       id="open-connected-device-modal"
-      defaultChecked
+      checked
       className="modal-toggle"
     />
     <div className="modal">
-      <div className="modal-box w-96 relative text-center">
+      <div className="modal-box w-96 sm:w-wideModal relative text-center">
         <a href="/" className="btn btn-xs btn-circle absolute right-2 top-2">
           ✕
         </a>
         <div>
-          <h3 className="mb-5 text-2xl font-serif">
-            Connect an existing account
-          </h3>
+          <h3 className="mb-8 text-base">Connect your existing account</h3>
           <div>
-            <p className="text-sm mb-3">
-              To connect with an existing account, you&apos;ll need a device
-              that&apos;s already connected to that account.
+            <p className="text-sm text-left mb-6">
+              To connect your existing account on this device, you’ll need a
+              device you are already connected on.
             </p>
-            <p className="text-sm">
-              On that device, click &quot;Connect a new device&quot; and follow
-              the instuctions.
+            <p className="text-sm text-left">
+              On that device, click “Connect a new device” and follow the
+              instructions.
             </p>
           </div>
         </div>

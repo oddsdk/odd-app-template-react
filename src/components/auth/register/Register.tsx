@@ -1,4 +1,5 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 import { appName } from '../../../lib/app-info'
 import {
@@ -10,17 +11,16 @@ import CheckIcon from '../../icons/CheckIcon'
 import XIcon from '../../icons/XIcon'
 import FilesystemActivity from '../../common/FilesystemActivity'
 
-let username = ''
-let usernameValid = true
-let usernameAvailable = true
-let registrationSuccess = true
-let checkingUsername = false
-
-let initializingFilesystem = false
-
 const Register = () => {
+  const [initializingFilesystem, setInitializingFilesystem] = useState(false);
+  const [registrationSuccess, setRegistrationSuccess] = useState(true);
+  const [username, setUsername] = useState('')
+  const [usernameValid, setUsernameValid] = useState(true);
+  const [usernameAvailable, setUsernameAvailable] = useState(true);
+  const [checkingUsername, setCheckingUsername] = useState(false)
+
   const [buttonDisabled, setButtonDisabled] = useState(
-    username.length === 0 || !usernameValid || !usernameAvailable
+    username.length === 0 || !usernameValid || !usernameAvailable || checkingUsername
   );
 
   const handleCheckUsername = async (
@@ -28,28 +28,41 @@ const Register = () => {
   ) => {
     const { value } = event.target as HTMLInputElement;
 
-    username = value;
-    checkingUsername = true;
+    setUsername(value);
+    setCheckingUsername(true);
 
-    usernameValid = await isUsernameValid(username);
+    const usernameValidLocal = await isUsernameValid(username);
+    setUsernameValid(usernameValidLocal)
 
-    if (usernameValid) {
-      usernameAvailable = await isUsernameAvailable(username);
+    if (usernameValidLocal) {
+      const usernameAvailableLocal = await isUsernameAvailable(username);
+      setUsernameAvailable(usernameAvailableLocal)
     }
-    checkingUsername = false;
 
-    setButtonDisabled(
-      username.length === 0 || !usernameValid || !usernameAvailable
-    );
+    setCheckingUsername(false);
   };
 
   const handleRegisterUser = async () => {
-    initializingFilesystem = true
+    if (checkingUsername) {
+      return;
+    }
 
-    registrationSuccess = await register(username)
+    setInitializingFilesystem(true);
 
-    if (!registrationSuccess) initializingFilesystem = false
+    const registrationSuccessLocal = await register(username)
+    setRegistrationSuccess(registrationSuccessLocal);
+
+    if (!registrationSuccessLocal) setInitializingFilesystem(false);
   }
+
+  useEffect(() => {
+    setButtonDisabled(
+      username.length === 0 ||
+        !usernameValid ||
+        !usernameAvailable ||
+        checkingUsername
+    );
+  }, [username, usernameValid, usernameAvailable, checkingUsername]);
 
   if (initializingFilesystem) {
     return <FilesystemActivity activity="Initializing" />;
@@ -64,22 +77,19 @@ const Register = () => {
         className="modal-toggle"
       />
       <div className="modal">
-        <div className="modal-box w-80 relative text-center dark:border-slate-600 dark:border">
-          <a
-            href="/"
-            className="btn btn-xs btn-circle absolute right-2 top-2 dark:bg-slate-600"
-          >
+        <div className="modal-box w-narrowModal relative text-center">
+          <Link to="/" className="btn btn-xs btn-circle absolute right-2 top-2">
             ✕
-          </a>
+          </Link>
 
           <div>
-            <h3 className="mb-7 text-xl font-serif">Choose a username</h3>
+            <h3 className="mb-7 text-base">Choose a username</h3>
             <div className="relative">
               <input
                 id="registration"
                 type="text"
                 placeholder="Type here"
-                className={`input input-bordered w-full block dark:border-slate-300 ${
+                className={`input input-bordered focus:outline-none w-full px-3 block ${
                   username.length !== 0 &&
                   (!usernameValid || !usernameAvailable)
                     ? "input-error"
@@ -88,20 +98,20 @@ const Register = () => {
                 onInput={handleCheckUsername}
               />
               {checkingUsername && (
-                <span className="rounded-lg border-t-2 border-l-2 border-slate-600 dark:border-slate-50 w-4 h-4 block absolute top-4 right-4 animate-spin" />
+                <span className="rounded-lg border-t-2 border-l-2 border-base-content w-4 h-4 block absolute top-4 right-4 animate-spin" />
               )}
               {!(username.length === 0) &&
                 usernameAvailable &&
                 usernameValid &&
                 !checkingUsername && (
-                  <span className="w-4 h-4 block absolute top-5 right-4">
+                  <span className="w-4 h-4 block absolute top-[17px] right-4">
                     <CheckIcon />
                   </span>
                 )}
               {!(username.length === 0) &&
                 !checkingUsername &&
                 !(usernameAvailable && usernameValid) && (
-                  <span className="w-4 h-4 block absolute top-5 right-4">
+                  <span className="w-4 h-4 block absolute top-[17px] right-4">
                     <XIcon />
                   </span>
                 )}
@@ -112,20 +122,20 @@ const Register = () => {
                 {(() => {
                   if (usernameValid && usernameAvailable) {
                     return (
-                      <span className="label-text-alt text-success">
-                        The username is available.
+                      <span className="label-text-alt text-green-700 dark:text-green-500">
+                        This username is available.
                       </span>
                     );
                   } else if (!usernameValid) {
                     return (
                       <span className="label-text-alt text-error">
-                        The username is invalid.
+                        This username is invalid.
                       </span>
                     );
                   } else if (!usernameAvailable) {
                     return (
                       <span className="label-text-alt text-error">
-                        The username is unavailable.
+                        This username is unavailable.
                       </span>
                     );
                   }
@@ -144,7 +154,7 @@ const Register = () => {
               <input
                 type="checkbox"
                 id="shared-computer"
-                className="peer checkbox checkbox-primary inline-grid align-bottom dark:border-slate-300"
+                className="peer checkbox checkbox-primary border-2 border-base-content hover:border-orange-300 transition-colors duration-250 ease-in-out inline-grid align-bottom"
               />
               {/* Warning when "This is a shared computer" is checked */}
               <label
@@ -165,11 +175,11 @@ const Register = () => {
             </div>
 
             <div className="mt-5">
-              <a className="btn btn-primary btn-outline" href="/connect">
+              <Link className="btn btn-outline" to="/connect">
                 Back
-              </a>
+              </Link>
               <button
-                className="ml-2 btn btn-primary"
+                className="ml-2 btn btn-primary disabled:opacity-50 disabled:border-neutral disabled:text-neutral"
                 disabled={buttonDisabled}
                 onClick={handleRegisterUser}
               >

@@ -190,6 +190,7 @@ export const uploadImageToWNFS: (image: File) => Promise<void> = async (
     });
   } catch (error) {
     addNotification({ msg: (error as Error).message, type: "error" });
+    console.error(error);
   }
 };
 
@@ -230,6 +231,7 @@ export const deleteImageFromWNFS: (name: string) => Promise<void> = async (
     }
   } catch (error) {
     addNotification({ msg: (error as Error).message, type: "error" });
+    console.error(error);
   }
 };
 

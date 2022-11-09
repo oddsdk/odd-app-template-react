@@ -1,3 +1,8 @@
+import clipboardCopy from "clipboard-copy";
+
+import { appName } from "../../../lib/app-info";
+import { addNotification } from "../../../lib/notifications";
+
 type Props = {
   pin: string;
   cancelConnection: () => void;
@@ -6,25 +11,28 @@ type Props = {
 const LinkDevice = ({ pin, cancelConnection }: Props) => {
   const handleCancelConnection = () => cancelConnection();
 
+  const handleCopyCode = async () => {
+    await clipboardCopy(pin);
+    addNotification({ msg: 'Copied to clipboard', type: 'success' });
+  };
+
   return (
     <>
-      <input
-        type="checkbox"
-        id="my-modal-5"
-        defaultChecked
-        className="modal-toggle"
-      />
+      <input type="checkbox" id="my-modal-5" checked className="modal-toggle" />
       <div className="modal">
-        <div className="modal-box w-80 relative text-center dark:border-slate-600 dark:border">
+        <div className="modal-box w-narrowModal relative text-center dark:border-slate-600 dark:border">
           <div className="grid grid-flow-row auto-rows-max gap-7">
-            <h3 className="text-xl font-serif">Connection Requested</h3>
+            <h3 className="text-base">Connect to {appName}</h3>
             <div className="grid grid-flow-row auto-rows-max gap-4 justify-items-center">
               {pin && (
-                <span className="btn bg-blue-100 dark:bg-blue-900 hover:bg-blue-100 dark:hover:bg-blue-900 border-0 btn-lg rounded-full text-3xl tracking-[.18em] w-3/4 cursor-default font-mono font-light">
+                <span
+                  onClick={handleCopyCode}
+                  className="btn text-base-100 hover:text-base-100 bg-base-content hover:bg-base-content border-0 btn-lg rounded-full text-deviceCode tracking-[.18em] w-3/4 cursor-pointer font-mono font-light"
+                >
                   {pin}
                 </span>
               )}
-              <span className="text-md">
+              <span className="text-sm text-left">
                 Enter this code on your connected device.
               </span>
               <div className="grid grid-flow-col auto-cols-max gap-4 justify-center items-center text-slate-500">
@@ -34,7 +42,7 @@ const LinkDevice = ({ pin, cancelConnection }: Props) => {
             </div>
             <div>
               <button
-                className="btn btn-primary btn-outline text-base font-normal mt-4"
+                className="btn btn-outline text-base mt-4"
                 onClick={handleCancelConnection}
               >
                 Cancel Request

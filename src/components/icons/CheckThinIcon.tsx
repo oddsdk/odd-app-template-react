@@ -1,4 +1,4 @@
-const CheckThinIcon = ({ color }: { color: string}) => (
+const CheckThinIcon = ({ color }: { color: string }) => (
   <svg
     width="28px"
     height="28px"
