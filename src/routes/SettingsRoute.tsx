@@ -3,13 +3,18 @@ import { useRecoilValue } from "recoil";
 
 import { sessionStore } from "../stores";
 import AvatarUpload from "../components/settings/AvatarUpload";
+import FullScreenLoader from "../components/common/FullScreenLoader";
 import ThemePreferences from "../components/settings/ThemePreferences";
 
 const SettingsRoute = () => {
   const session = useRecoilValue(sessionStore)
 
-  if (!session.authed) {
+  if (!session.authed && !session.loading) {
     return <Navigate to="/" />;
+  }
+
+  if (session.loading) {
+    return <FullScreenLoader />;
   }
 
   return (
