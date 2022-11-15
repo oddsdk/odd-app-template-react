@@ -18,7 +18,7 @@ const FileUploadCard = () => {
         </div>
       ) : (
         <>
-          <div className="flex flex-col justify-center items-center pt-5 pb-6">
+          <div className="flex flexs-col justify-center items-center pt-5 pb-6">
             <FileUploadIcon />
             <p className="mt-4 mb-2 text-sm">
               <span className="font-bold text-sm">Click to upload</span>
