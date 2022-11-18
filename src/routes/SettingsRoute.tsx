@@ -27,7 +27,7 @@ const SettingsRoute = () => {
         </div>
 
         <div>
-          <h3 className="text-lg mb-4">Address</h3>
+          <h3 className="text-lg mb-4">Username</h3>
           <p className="transition-colors">{session.username}</p>
         </div>
 
