@@ -12,7 +12,7 @@ const initialize = async (): Promise<void> => {
 
     const program: webnative.Program = await webnative.program({
       tag: { creator: "Fission", name: "WAT" },
-      debug: false, // TODO: Add a flag or script to turn debugging on/off
+      debug: process.env.NODE_ENV === 'development',
     });
 
     if (program.session) {
