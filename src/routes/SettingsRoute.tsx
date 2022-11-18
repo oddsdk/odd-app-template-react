@@ -9,7 +9,7 @@ import ThemePreferences from "../components/settings/ThemePreferences";
 const SettingsRoute = () => {
   const session = useRecoilValue(sessionStore)
 
-  if (!session.authed && !session.loading) {
+  if (!session.session && !session.loading) {
     return <Navigate to="/" />;
   }
 

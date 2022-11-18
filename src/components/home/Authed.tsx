@@ -10,7 +10,7 @@ const Authed = () => {
     <div className="min-h-[calc(100vh-128px)] md:min-h-[calc(100vh-160px)] pt-8 md:pt-16 flex flex-col items-start max-w-[690px] m-auto gap-10 pb-5 text-sm">
       <h1 className="text-xl">
         Welcome,{" "}
-        <span className="font-bold uppercase">
+        <span className="font-bold">
           {session.username}
         </span>
         !

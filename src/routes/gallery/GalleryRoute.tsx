@@ -24,14 +24,14 @@ const GalleryRoute = () => {
 
   // If the user is not authed redirect them to the home page
   useEffect(() => {
-    if (!session.loading && !session.authed) {
+    if (!session.loading && !session.session) {
       navigate('/');
     }
   }, [session, navigate])
 
   return (
     <div className="p-2 mb-14 text-center">
-      {session.authed && (
+      {session.session && (
         <>
           <div className="flex items-center justify-center translate-y-1/2 w-fit m-auto">
             <div className="tabs border-2 overflow-hidden border-base-content rounded-lg">

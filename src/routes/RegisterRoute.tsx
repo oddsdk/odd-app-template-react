@@ -7,7 +7,7 @@ import Welcome from '../components/auth/register/Welcome'
 const RegisterRoute = () => {
   const session = useRecoilValue(sessionStore);
 
-  if (session.authed) {
+  if (session.session) {
    return <Welcome />;
   } else {
     return <Register />;

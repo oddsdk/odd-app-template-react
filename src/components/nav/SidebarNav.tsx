@@ -49,7 +49,7 @@ const SidebarNav = ({ children }: any) => {
   };
 
   // Only render the nav if the user is authed and not in the connection flow
-  if (session.authed && !location.pathname.match(/register|backup|delegate/)) {
+  if (session.session && !location.pathname.match(/register|backup|delegate/)) {
     return (
       <div className="drawer drawer-mobile h-screen">
         <input

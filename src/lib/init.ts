@@ -1,53 +1,50 @@
 import * as webnative from "webnative";
-import { setup } from "webnative";
-import type FileSystem from "webnative/fs/index";
 import { getRecoil, setRecoil } from "recoil-nexus";
 
 import { sessionStore, filesystemStore } from "../stores";
 import { SESSION_ERROR } from "../lib/session";
 import { getBackupStatus, type BackupStatus } from "../lib/auth/backup";
 
-// TODO: Add a flag or script to turn debugging on/off
-setup.debug({ enabled: false });
 
 const initialize = async (): Promise<void> => {
   try {
     let backupStatus: BackupStatus = null;
 
-    const state: webnative.AppState = await webnative.app({ useWnfs: true });
+    const program: webnative.Program = await webnative.program({
+      tag: { creator: "Fission", name: "WAT" },
+      debug: false, // TODO: Add a flag or script to turn debugging on/off
+    });
 
-    switch (state.scenario) {
-      case webnative.AppScenario.NotAuthed:
-        setRecoil(sessionStore, {
-          username: "",
-          authed: false,
-          loading: false,
-          backupCreated: false,
-        });
-        break;
+    if (program.session) {
+      // Authed
+      backupStatus = await getBackupStatus(program.session.fs)
 
-      case webnative.AppScenario.Authed:
-        backupStatus = await getBackupStatus(state.fs as FileSystem);
+      setRecoil(sessionStore, {
+        username: program.session.username,
+        session: program.session,
+        authStrategy: program.auth,
+        loading: false,
+        backupCreated: backupStatus.created,
+      });
 
-        setRecoil(sessionStore, {
-          username: state.username,
-          authed: state.authenticated,
-          loading: false,
-          backupCreated: !!backupStatus?.created,
-        });
+      setRecoil(filesystemStore, program.session.fs);
+    } else {
+      // Not authed
 
-        setRecoil(filesystemStore, state.fs as FileSystem);
-        break;
-
-      default:
-        break;
+      setRecoil(sessionStore, {
+        username: "",
+        session: null,
+        authStrategy: program.auth,
+        loading: false,
+        backupCreated: null,
+      });
     }
   } catch (error) {
 
     const session = getRecoil(sessionStore);
 
     switch (error) {
-      case webnative.InitialisationError.InsecureContext:
+      case webnative.ProgramError.InsecureContext:
         setRecoil(sessionStore, {
           ...session,
           loading: false,
@@ -55,7 +52,7 @@ const initialize = async (): Promise<void> => {
         });
         break;
 
-      case webnative.InitialisationError.UnsupportedBrowser:
+      case webnative.ProgramError.UnsupportedBrowser:
         setRecoil(sessionStore, {
           ...session,
           loading: false,

@@ -7,7 +7,7 @@ import Public from "../components/home/Public";
 const HomeRoute = () => {
   const session = useRecoilValue(sessionStore);
 
-  if (session.authed) {
+  if (session.session) {
     return <Authed />;
   }
 

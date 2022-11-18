@@ -11,7 +11,11 @@ export const setBackupStatus = async (
 ): Promise<void> => {
   const fs = getRecoil(filesystemStore);
   const backupStatusPath = webnative.path.file('private', 'backup-status.json');
-  await fs?.write(backupStatusPath, JSON.stringify(status));
+  await fs.write(
+    backupStatusPath,
+    new TextEncoder().encode(JSON.stringify(status))
+  );
+
   await fs?.publish();
 };
 
@@ -21,11 +25,11 @@ export const getBackupStatus = async (fs: FileSystem): Promise<BackupStatus> => 
   if (await fs?.exists(backupStatusPath)) {
     const fileContent = await fs?.read(backupStatusPath);
 
-    if (typeof fileContent === 'string') {
-      return JSON.parse(fileContent) as BackupStatus;
+    try {
+      return JSON.parse(new TextDecoder().decode(fileContent)) as BackupStatus;
+    } catch (err) {
+      console.warn(`Unable to load backup status: ${err.message || err}`);
     }
-
-    console.warn('Unable to load backup status');
 
     return { created: false };
   } else {

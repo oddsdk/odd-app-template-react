@@ -27,7 +27,7 @@ const Header = () => {
   return (
     <header className="navbar flex bg-base-100 pt-4">
       <div className="lg:hidden">
-        {session.authed ? (
+        {session.session ? (
           <label
             htmlFor="sidebar-nav"
             className="drawer-button cursor-pointer -translate-x-2"
@@ -46,7 +46,7 @@ const Header = () => {
       </div>
 
       {/* Even if the user is not authed, render this header in the connection flow */}
-      {(!session.authed ||
+      {(!session.session ||
         location.pathname.match(/register|backup|delegate/)) && (
         <div
           className="hidden lg:flex flex-1 items-center cursor-pointer gap-3"
@@ -63,7 +63,7 @@ const Header = () => {
       )}
 
       <div className="ml-auto">
-        {!session.loading && !session.authed && (
+        {!session.loading && !session.session && (
           <div className="flex-none">
             <Link className="btn btn-primary btn-sm !h-10" to="/connect">
               Connect
@@ -71,7 +71,7 @@ const Header = () => {
           </div>
         )}
 
-        {!session.loading && session.authed && !session.backupCreated && (
+        {!session.loading && session.session && !session.backupCreated && (
           <span
             onClick={() => navigate("/delegate-account")}
             className="btn btn-sm h-10 btn-warning rounded-full bg-orange-300 border-2 border-neutral font-medium text-neutral transition-colors ease-in hover:bg-orange-300"
@@ -81,7 +81,7 @@ const Header = () => {
           </span>
         )}
 
-        {session.authed && (
+        {session.session && (
           <Link to="/settings" className="ml-2 cursor-pointer">
             <Avatar size="small" />
           </Link>

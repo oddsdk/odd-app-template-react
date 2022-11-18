@@ -15,7 +15,7 @@ const Connect = ({ changeView }: Props) => {
       <input
         type="checkbox"
         id="connect-modal"
-        checked
+        defaultChecked
         className="modal-toggle"
       />
       <div className="modal">

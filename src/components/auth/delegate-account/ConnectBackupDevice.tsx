@@ -27,7 +27,7 @@ const ConnectBackupDevice = ({
       <input
         type="checkbox"
         id="backup-device-modal"
-        checked
+        defaultChecked
         className="modal-toggle"
       />
       <div className="modal">

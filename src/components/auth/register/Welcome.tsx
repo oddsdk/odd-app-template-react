@@ -13,7 +13,7 @@ const Welcome = () => {
       <input
         type="checkbox"
         id="link-device-modal"
-        checked
+        defaultChecked
         className="modal-toggle"
       />
       <div className="modal">
