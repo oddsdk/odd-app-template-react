@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useRecoilValue } from 'recoil';
 
 import init from "./lib/init";
@@ -21,10 +21,9 @@ import Settings from './routes/SettingsRoute';
 import NotFound from './routes/NotFoundRoute';
 
 const AppRenderer = () => {
-  const location = useLocation();
   const session = useRecoilValue(sessionStore);
 
-  if (session.loading && !location.pathname.match(/register|backup|delegate/)) {
+  if (session.loading) {
     return <FullScreenLoader />
   }
 
