@@ -179,7 +179,7 @@ const Register = () => {
                 Back
               </Link>
               <button
-                className="ml-2 btn btn-primary disabled:opacity-50 disabled:border-neutral disabled:text-neutral"
+                className="ml-2 btn btn-primary disabled:opacity-50 disabled:border-neutral-900 disabled:text-neutral-900"
                 disabled={buttonDisabled}
                 onClick={handleRegisterUser}
               >
