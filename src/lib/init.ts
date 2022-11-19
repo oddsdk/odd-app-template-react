@@ -40,6 +40,7 @@ const initialize = async (): Promise<void> => {
       });
     }
   } catch (error) {
+    console.error(error)
 
     const session = getRecoil(sessionStore);
 
