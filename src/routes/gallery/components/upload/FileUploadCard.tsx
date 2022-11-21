@@ -10,7 +10,7 @@ const FileUploadCard = () => {
   return (
     <label
       htmlFor="upload-file"
-      className="group btn flex flex-col justify-center items-center !p-0 !h-auto aspect-[22/23] object-cover rounded-lg shadow-orange hover:border-neutral-500 overflow-hidden transition-colors ease-in bg-base-100 border-2 box-content border-neutral-900 cursor-pointer text-neutral-900 bg-gradient-to-r from-orange-600 to-orange-300"
+      className="group btn flex flex-col justify-center items-center !p-0 !h-auto aspect-[22/23] object-cover rounded-lg shadow-orange hover:border-neutral-500 overflow-hidden transition-colors ease-in bg-base-100 border-2 box-content border-neutral-900 cursor-pointer text-neutral-900 bg-gradient-to-r from-orange-300 to-orange-600"
     >
       {gallery.loading ? (
         <div className="flex justify-center items-center p-12">
