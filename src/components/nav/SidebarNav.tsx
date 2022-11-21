@@ -49,7 +49,7 @@ const SidebarNav = ({ children }: any) => {
   };
 
   // Only render the nav if the user is authed and not in the connection flow
-  if (session.session && !location.pathname.match(/register|backup|delegate/)) {
+  if (session.session) {
     return (
       <div className="drawer drawer-mobile h-screen">
         <input
@@ -60,7 +60,11 @@ const SidebarNav = ({ children }: any) => {
           onChange={handleChange}
         />
         <div className="drawer-content flex flex-col">{children}</div>
-        <div className="drawer-side">
+        <div
+          className={`drawer-side ${location.pathname.match(
+            /register|backup|delegate/
+          ) ? '!hidden' : ''}`}
+        >
           <label
             htmlFor="sidebar-nav"
             className="drawer-overlay !bg-[#262626] !opacity-[.85]"
@@ -70,8 +74,8 @@ const SidebarNav = ({ children }: any) => {
             <div
               className="flex items-center gap-3 cursor-pointer mb-8"
               onClick={() => {
-                handleCloseDrawer()
-                navigate('/')
+                handleCloseDrawer();
+                navigate("/");
               }}
             >
               <BrandLogo />
