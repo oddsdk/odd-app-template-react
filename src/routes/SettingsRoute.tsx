@@ -21,7 +21,7 @@ const SettingsRoute = () => {
   }
 
   return (
-    <div className="min-h-[calc(100vh-128px)] md:min-h-[calc(100vh-160px)] pt-8 md:pt-16 flex flex-col items-start max-w-[690px] m-auto gap-10 pb-5 text-sm">
+    <div className="min-h-[calc(100vh-128px)] md:min-h-[calc(100vh-160px)] pt-8 md:pt-16 flex flex-col items-start max-w-[690px] m-auto gap-10 pb-28 text-sm">
       <h1 className="text-xl">Account Settings</h1>
 
       <div className="flex flex-col items-start justify-center gap-6">
