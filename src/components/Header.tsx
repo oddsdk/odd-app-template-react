@@ -2,7 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 
 import { sessionStore, themeStore } from "../stores";
-import { THEME, storeTheme } from "../lib/theme";
+import { DEFAULT_THEME_KEY, storeTheme, ThemeOptions } from "../lib/theme";
 import AlphaTag from "./nav/AlphaTag";
 import Avatar from "./settings/Avatar";
 import BrandLogo from "./icons/BrandLogo";
@@ -19,8 +19,12 @@ const Header = () => {
   const session = useRecoilValue(sessionStore);
 
   const handleUpdateTheme = () => {
-    const newTheme = Object.values(THEME).filter((val) => val !== theme)[0];
-    setTheme(newTheme);
+    localStorage.setItem(DEFAULT_THEME_KEY, "false");
+    const newTheme = Object.values(ThemeOptions).filter((val) => val !== theme.selectedTheme)[0];
+    setTheme({
+      selectedTheme: newTheme,
+      useDefault: false,
+    });
     storeTheme(newTheme)
   };
 
@@ -63,14 +67,6 @@ const Header = () => {
       )}
 
       <div className="ml-auto">
-        {!session.loading && !session.session && (
-          <div className="flex-none">
-            <Link className="btn btn-primary btn-sm !h-10" to="/connect">
-              Connect
-            </Link>
-          </div>
-        )}
-
         {!session.loading && session.session && !session.backupCreated && (
           <span
             onClick={() => navigate("/delegate-account")}
@@ -89,7 +85,7 @@ const Header = () => {
 
         <span className="ml-2">
           <span onClick={handleUpdateTheme}>
-            {theme === THEME.LIGHT ? <LightMode /> : <DarkMode />}
+            {theme.selectedTheme === ThemeOptions.LIGHT ? <LightMode /> : <DarkMode />}
           </span>
         </span>
       </div>

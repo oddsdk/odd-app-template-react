@@ -16,6 +16,7 @@ import Connect from './routes/ConnectRoute';
 import DelegateAccount from './routes/DelegateAccountRoute';
 import LinkDevice from './routes/LinkDeviceRoute';
 import Gallery from './routes/gallery/GalleryRoute';
+import Recover from './routes/RecoverRoute';
 import Register from './routes/RegisterRoute';
 import Settings from './routes/SettingsRoute';
 import NotFound from './routes/NotFoundRoute';
@@ -42,6 +43,7 @@ const AppRenderer = () => {
             />
             <Route path="/link-device" element={<LinkDevice />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/recover" element={<Recover />} />
             <Route path="/about" element={<About />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/" element={<Home />} />
@@ -66,7 +68,7 @@ const App = () => {
   useMountEffect()
 
   return (
-    <div data-theme={theme} className="App min-h-screen">
+    <div data-theme={theme.selectedTheme} className="App min-h-screen">
       <Router>
         <Notifications />
         <AppRenderer />

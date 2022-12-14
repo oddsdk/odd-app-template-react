@@ -1,17 +1,20 @@
 import React, { useState } from "react";
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
+import { getRecoil } from "recoil-nexus";
 
 import { sessionStore } from '../../stores'
 import About from '../icons/About'
 import AlphaTag from './AlphaTag'
 import BrandLogo from '../icons/BrandLogo'
 import BrandWordmark from '../icons/BrandWordmark'
+import Disconnect from '../icons/Disconnect'
 import Home from '../icons/Home'
+import NavItem from './NavItem'
 import PhotoGallery from '../icons/PhotoGallery'
 import Settings from '../icons/Settings'
 
-const navItems = [
+const navItemsUpper = [
   {
     label: 'Home',
     href: '/',
@@ -23,16 +26,30 @@ const navItems = [
     icon: PhotoGallery
   },
   {
-    label: 'About This Template',
-    href: '/about/',
-    icon: About
-  },
-  {
     label: 'Account Settings',
     href: '/settings/',
     icon: Settings
   }
 ]
+
+const navItemsLower = [
+  {
+    label: "About This Template",
+    href: "/about/",
+    icon: About,
+  },
+  {
+    label: "Disconnect",
+    callback: async () => {
+      const session = getRecoil(sessionStore)
+      await session.session.destroy();
+      // Force a hard refresh to ensure everything is disconnected properly
+      window.location.href = window.location.origin;
+    },
+    icon: Disconnect,
+    placement: "bottom",
+  },
+];
 
 const SidebarNav = ({ children }: any) => {
   const location = useLocation();
@@ -61,9 +78,9 @@ const SidebarNav = ({ children }: any) => {
         />
         <div className="drawer-content flex flex-col">{children}</div>
         <div
-          className={`drawer-side ${location.pathname.match(
-            /register|backup|delegate/
-          ) ? '!hidden' : ''}`}
+          className={`drawer-side ${
+            location.pathname.match(/register|backup|delegate|recover/) ? "!hidden" : ""
+          }`}
         >
           <label
             htmlFor="sidebar-nav"
@@ -83,23 +100,25 @@ const SidebarNav = ({ children }: any) => {
               <AlphaTag />
             </div>
 
-            {/* Menu */}
+            {/* Upper Menu */}
             <ul>
-              {navItems.map((item, key) => (
-                <li key={key}>
-                  <Link
-                    className={`flex items-center justify-start gap-2 font-bold text-sm text-base-content hover:text-base-100 bg-base-100 hover:bg-base-content ease-in-out duration-[250ms] ${
-                      location.pathname === item.href
-                        ? "!text-base-100 !bg-base-content"
-                        : ""
-                    }`}
-                    to={item.href}
-                    onClick={handleCloseDrawer}
-                  >
-                    {React.createElement(item.icon)}
-                    {item.label}
-                  </Link>
-                </li>
+              {navItemsUpper.map((item, key) => (
+                <NavItem
+                  handleCloseDrawer={handleCloseDrawer}
+                  item={item}
+                  key={key}
+                />
+              ))}
+            </ul>
+
+            {/* Lower Menu */}
+            <ul className="mt-auto pb-8">
+              {navItemsLower.map((item, key) => (
+                <NavItem
+                  handleCloseDrawer={handleCloseDrawer}
+                  item={item}
+                  key={key}
+                />
               ))}
             </ul>
           </div>

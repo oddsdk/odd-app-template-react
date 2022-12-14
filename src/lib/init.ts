@@ -4,25 +4,36 @@ import { getRecoil, setRecoil } from "recoil-nexus";
 import { sessionStore, filesystemStore } from "../stores";
 import { SESSION_ERROR } from "../lib/session";
 import { getBackupStatus, type BackupStatus } from "../lib/auth/backup";
+import { USERNAME_STORAGE_KEY } from "../lib/auth/account";
 
+export const NAMESPACE = { creator: "Fission", name: "WAT" };
 
 const initialize = async (): Promise<void> => {
   try {
     let backupStatus: BackupStatus = null;
 
     const program: webnative.Program = await webnative.program({
-      tag: { creator: "Fission", name: "WAT" },
-      debug: process.env.NODE_ENV === 'development',
+      namespace: NAMESPACE,
+      debug: process.env.NODE_ENV === "development",
     });
 
     if (program.session) {
       // Authed
       backupStatus = await getBackupStatus(program.session.fs)
 
+      const fullUsername = (await program.components.storage.getItem(
+        USERNAME_STORAGE_KEY
+      )) as string;
+
       setRecoil(sessionStore, {
-        username: program.session.username,
+        username: {
+          full: fullUsername,
+          hashed: program.session.username,
+          trimmed: fullUsername.split("#")[0],
+        },
         session: program.session,
         authStrategy: program.auth,
+        program,
         loading: false,
         backupCreated: backupStatus.created,
       });
@@ -32,9 +43,10 @@ const initialize = async (): Promise<void> => {
       // Not authed
 
       setRecoil(sessionStore, {
-        username: "",
+        username: null,
         session: null,
         authStrategy: program.auth,
+        program,
         loading: false,
         backupCreated: null,
       });

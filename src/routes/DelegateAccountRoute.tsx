@@ -6,7 +6,7 @@ import QRCode from 'qrcode-svg'
 import { filesystemStore, sessionStore, themeStore } from '../stores';
 import { addNotification } from '../lib/notifications';
 import { createAccountLinkingProducer } from '../lib/auth/linking';
-import { THEME } from '../lib/theme';
+import { ThemeOptions } from '../lib/theme';
 import { getBackupStatus, setBackupStatus } from '../lib/auth/backup';
 import ConnectBackupDevice from '../components/auth/delegate-account/ConnectBackupDevice';
 import DelegateAccount from '../components/auth/delegate-account/DelegateAccount';
@@ -84,25 +84,28 @@ const DelegateAccountRoute = () => {
         updateBackupCreated();
       }
 
-      const username = session.username
+      const hashedUsername = session.username.hashed;
+      const fullUsername = session.username.full;
 
-      if (username) {
-        const origin = window.location.origin
+      if (hashedUsername && fullUsername) {
+        const origin = window.location.origin;
 
-        const updatedConnectionLink = `${origin}/link-device?username=${username}`;
+        const updatedConnectionLink = `${origin}/link-device?hashedUsername=${hashedUsername}&username=${encodeURIComponent(
+          fullUsername
+        )}`;
         setConnectionLink(updatedConnectionLink);
         setQrcode(
           new QRCode({
             content: updatedConnectionLink,
-            color: theme === THEME.LIGHT ? "#171717" : "#FAFAFA",
-            background: theme === THEME.LIGHT ? "#FAFAFA" : "#171717",
+            color: theme.selectedTheme === ThemeOptions.LIGHT ? "#171717" : "#FAFAFA",
+            background: theme.selectedTheme === ThemeOptions.LIGHT ? "#FAFAFA" : "#171717",
             padding: 0,
-            width: 216,
-            height: 216,
+            width: 250,
+            height: 250,
           }).svg()
         );
 
-        initAccountLinkingProducer(username)
+        initAccountLinkingProducer(hashedUsername);
       }
     }, []);
 

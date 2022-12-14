@@ -25,21 +25,24 @@ const LinkDeviceRoute = () => {
   //   useState<account.AccountLinkingConsumer>();
 
   const query = useQuery();
-  const username = query.get("username") as string;
+  const hashedUsername = query.get('hashedUsername') as string;
+  const fullUsername = decodeURIComponent(
+    query.get('username') as string
+  );
 
   const initAccountLinkingConsumer = async () => {
-    const accountLinkingConsumer = await createAccountLinkingConsumer(username);
+    const accountLinkingConsumer = await createAccountLinkingConsumer(hashedUsername);
     // setAccountLinkingConsumer(updatedAccountLinkingConsumer)
 
     accountLinkingConsumer?.on("challenge", ({ pin }) => {
       setDisplayPin(pin.join(""));
     });
 
-    accountLinkingConsumer?.on("link", async ({ approved, username }) => {
+    accountLinkingConsumer?.on("link", async ({ approved }) => {
       if (approved) {
         setView("load-filesystem");
 
-        await loadAccount(username);
+        await loadAccount(hashedUsername, fullUsername);
 
         addNotification({ msg: "You're now connected!", type: "success" });
         navigate("/");

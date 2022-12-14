@@ -52,7 +52,7 @@ const Avatar = ({ size = 'large' }) => {
         <div
           className={`flex items-center justify-center bg-base-content text-base-100 uppercase font-bold rounded-full ${sizeClasses}`}
         >
-          {session.username[0]}
+          {session.username.trimmed[0]}
         </div>
       )}
     </>

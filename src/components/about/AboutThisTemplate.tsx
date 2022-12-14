@@ -5,7 +5,7 @@ const AboutThisTemplate = () => (
     <div className="max-w-[573px]">
       <p className="mb-5">
         <a
-          className="link link-primary whitespace-nowrap pr-1"
+          className="link text-blue-600 whitespace-nowrap pr-1"
           href="https://github.com/fission-codes/webnative"
           target="_blank"
           rel="noreferrer"
@@ -18,7 +18,7 @@ const AboutThisTemplate = () => (
       <p>
         You can fork this
         <a
-          className="link link-primary whitespace-nowrap px-1"
+          className="link text-blue-600 whitespace-nowrap px-1"
           href="https://github.com/webnative-examples/webnative-app-template-react"
           target="_blank"
           rel="noreferrer"
@@ -28,7 +28,7 @@ const AboutThisTemplate = () => (
         </a>
         to start writing your own Webnative app. Learn more in the
         <a
-          className="link link-primary whitespace-nowrap pl-1"
+          className="link text-blue-600 whitespace-nowrap pl-1"
           href="https://guide.fission.codes/"
           target="_blank"
           rel="noreferrer"

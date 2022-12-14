@@ -19,7 +19,7 @@ const Welcome = () => {
       <div className="modal">
         <div className="modal-box w-narrowModal relative text-center">
           <div>
-            <h3 className="mb-14 text-base">Welcome, {session.username}!</h3>
+            <h3 className="mb-14 text-base">Welcome, {session.username.trimmed}!</h3>
             <div className="flex justify-center mb-11 text-base-content">
               <WelcomeCheckIcon />
             </div>
@@ -33,7 +33,7 @@ const Welcome = () => {
                   className="peer hidden"
                 />
                 <label
-                  className="text-primary underline mb-8 hover:cursor-pointer peer-checked:hidden"
+                  className="text-blue-500 underline mb-8 hover:cursor-pointer peer-checked:hidden"
                   htmlFor="password-message"
                 >
                   Wait&mdash;what&#39;s my password?

@@ -9,11 +9,7 @@ const Authed = () => {
   return (
     <div className="min-h-[calc(100vh-128px)] md:min-h-[calc(100vh-160px)] pt-8 md:pt-16 flex flex-col items-start max-w-[690px] m-auto gap-10 pb-5 text-sm">
       <h1 className="text-xl">
-        Welcome,{" "}
-        <span className="font-bold">
-          {session.username}
-        </span>
-        !
+        Welcome, <span className="font-bold">{session.username.trimmed}</span>!
       </h1>
 
       <div className="flex flex-col items-start justify-center gap-5">
@@ -24,6 +20,19 @@ const Authed = () => {
         </p>
         <Link className="btn btn-primary" to="/gallery">
           Try the Photo Gallery Demo
+        </Link>
+      </div>
+
+      <div className="flex flex-col items-start justify-center gap-5">
+        <h2 className="text-lg">Device Connection Demo</h2>
+        <p>
+          With Webnative SDK, a user&apos;s account lives only on their
+          connected devices — entirely under their control. It&apos;s easy for
+          them to connect as many devices as they&apos;d like. For
+          recoverability, we recommend they always connect at least two.
+        </p>
+        <Link className="btn btn-primary" to="/delegate-account">
+          Connect an additional device
         </Link>
       </div>
     </div>

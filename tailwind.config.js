@@ -9,7 +9,7 @@ module.exports = {
     themes: [
       {
         dark: {
-          primary: "#3b82f6",
+          primary: "#171717",
           secondary: "#30aadd",
           accent: "#00ffc6",
           neutral: "#171717",
@@ -20,14 +20,14 @@ module.exports = {
           "base-content": "#FAFAFA", // Base text content color
           "base-100": "#171717", // Base background color
           "--rounded-box": "16px",
-          "--rounded-btn": "8px",
+          "--rounded-btn": "4px",
           "--rounded-badge": "2px",
           "--tab-radius": "2px",
           "--btn-text-case": "normal-case",
           "--navbar-padding": "16px",
         },
         light: {
-          primary: "#3b82f6",
+          primary: "#FAFAFA",
           secondary: "#30aadd",
           accent: "#00ffc6",
           neutral: "#171717",
@@ -38,7 +38,7 @@ module.exports = {
           "base-content": "#171717", // Base text content color
           "base-100": "#FAFAFA", // Base background color
           "--rounded-box": "16px",
-          "--rounded-btn": "8px",
+          "--rounded-btn": "4px",
           "--rounded-badge": "2px",
           "--tab-radius": "2px",
           "--btn-text-case": "normal-case",
@@ -61,19 +61,22 @@ module.exports = {
         "22/23": "22 / 23",
       },
       boxShadow: {
-        orange: "0px 8px 0px rgba(243, 110, 101, 0.2)",
+        orange: "0px 4px 0px rgba(243, 110, 101, 0.35)",
       },
       colors: {
         blue: {
           100: "#DBEAFE",
+          600: "#2563EB",
           900: "#1E3A8A",
         },
         green: {
+          300: "#86EFAC",
           500: "#22C55E",
           700: "#15803D",
         },
         neutral: {
           50: "#FAFAFA",
+          200: "#E5E5E5",
           500: "#737373",
           700: "#404040",
           800: "#262626",
@@ -88,6 +91,7 @@ module.exports = {
           700: "#C2410C",
         },
         red: {
+          400: "#F87171",
           600: "#DC2626",
         },
       },
@@ -109,10 +113,6 @@ module.exports = {
         marquee: {
           "0%": { transform: "translateX(102%)" },
           "100%": { transform: "translateX(-100vw)" },
-        },
-        fadeInUp: {
-          from: { opacity: 0, translate3d: "(0, 100%, 0)" },
-          to: { opacity: 1, translate3d: "(0, 0, 0)" },
         },
       },
       width: {

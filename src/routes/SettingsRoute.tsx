@@ -1,10 +1,13 @@
-import { Link, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 
 import { sessionStore } from "../stores";
 import AvatarUpload from "../components/settings/AvatarUpload";
+import ConnectedDevices from "../components/settings/ConnectedDevices";
 import FullScreenLoader from "../components/common/FullScreenLoader";
 import ThemePreferences from "../components/settings/ThemePreferences";
+import RecoveryKit from "../components/settings/RecoveryKit";
+import Username from "../components/settings/Username";
 
 const SettingsRoute = () => {
   const session = useRecoilValue(sessionStore)
@@ -22,33 +25,15 @@ const SettingsRoute = () => {
       <h1 className="text-xl">Account Settings</h1>
 
       <div className="flex flex-col items-start justify-center gap-6">
-        <div>
-          <AvatarUpload />
-        </div>
+        <AvatarUpload />
 
-        <div>
-          <h3 className="text-lg mb-4">Username</h3>
-          <p className="transition-colors">{session.username}</p>
-        </div>
+        <Username />
 
-        <div>
-          <ThemePreferences />
-        </div>
+        <ThemePreferences />
 
-        <div>
-          <h3 className="text-lg mb-4">Connected devices</h3>
-          {session.backupCreated ? (
-            <p className="mb-4">
-              You&apos;ve already connected an additional device, but you can
-              connect more.
-            </p>
-          ) : (
-            <p className="mb-4">You have no other connected devices.</p>
-          )}
-          <Link className="btn btn-primary" to="/delegate-account">
-            Connect an additional device
-          </Link>
-        </div>
+        <ConnectedDevices />
+
+        <RecoveryKit />
       </div>
     </div>
   );
