@@ -5,15 +5,14 @@ import { sessionStore, filesystemStore } from "../stores";
 import { SESSION_ERROR } from "../lib/session";
 import { getBackupStatus, type BackupStatus } from "../lib/auth/backup";
 import { USERNAME_STORAGE_KEY } from "../lib/auth/account";
-
-export const NAMESPACE = { creator: "Fission", name: "WAT" };
+import { webnativeNamespace } from "../lib/app-info";
 
 const initialize = async (): Promise<void> => {
   try {
     let backupStatus: BackupStatus = null;
 
     const program: webnative.Program = await webnative.program({
-      namespace: NAMESPACE,
+      namespace: webnativeNamespace,
       debug: process.env.NODE_ENV === "development",
     });
 
