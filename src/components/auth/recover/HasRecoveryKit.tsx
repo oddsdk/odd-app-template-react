@@ -80,7 +80,6 @@ const HasRecoveryKit = () => {
           resource: "*",
           proof: proof ? proof : undefined,
           lifetimeInSeconds: 60 * 3, // Three minutes
-
           audience: issuer,
           issuer,
         });
