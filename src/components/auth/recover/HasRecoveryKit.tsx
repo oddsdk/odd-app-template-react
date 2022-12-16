@@ -39,13 +39,13 @@ const HasRecoveryKit = () => {
         const {
           authStrategy,
           program: {
-            components: { crypto, reference, storage }
-          }
-        } = session
+            components: { crypto, reference, storage },
+          },
+        } = session;
 
         const parts = (event.target.result as string)
-          .split('username: ')[1]
-          .split('key: ')
+          .split("username: ")[1]
+          .split("key: ");
         const readKey = uint8arrays.fromString(
           parts[1].replace(/(\r\n|\n|\r)/gm, ""),
           "base64pad"
@@ -53,10 +53,10 @@ const HasRecoveryKit = () => {
 
         const oldUsername = parts[0].replace(/(\r\n|\n|\r)/gm, "");
         const hashedOldUsername = await prepareUsername(oldUsername);
-        const oldRootDID = await reference.didRoot.lookup(hashedOldUsername);
+        const newRootDID = await session.program.agentDID();
 
-        // Construct a new username using the old `trimmed` name and `oldRootDID`
-        const newUsername = `${oldUsername.split("#")[0]}#${oldRootDID}`;
+        // Construct a new username using the old `trimmed` name and `newRootDID`
+        const newUsername = `${oldUsername.split("#")[0]}#${newRootDID}`;
         const hashedNewUsername = await prepareUsername(newUsername);
 
         storage.setItem(USERNAME_STORAGE_KEY, newUsername);
@@ -70,7 +70,6 @@ const HasRecoveryKit = () => {
         }
 
         // Build an ephemeral UCAN to allow the
-        const issuer = await DID.write(crypto);
         const proof: string | null = await storage.getItem(
           storage.KEYS.ACCOUNT_UCAN
         );
@@ -80,11 +79,10 @@ const HasRecoveryKit = () => {
           resource: "*",
           proof: proof ? proof : undefined,
           lifetimeInSeconds: 60 * 3, // Three minutes
-          audience: issuer,
-          issuer,
+          audience: newRootDID,
+          issuer: newRootDID,
         });
 
-        const newRootDID = await reference.didRoot.lookup(hashedNewUsername);
         const oldRootCID = await reference.dataRoot.lookup(hashedOldUsername);
 
         // Update the dataRoot of the new user
@@ -100,7 +98,7 @@ const HasRecoveryKit = () => {
         // Load account data into sessionStore
         await loadAccount(hashedNewUsername, newUsername);
 
-        setState(RECOVERY_STATES.Done)
+        setState(RECOVERY_STATES.Done);
       } catch (error) {
         console.error(error)
         setState(RECOVERY_STATES.Error)
