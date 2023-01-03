@@ -2,8 +2,7 @@ import { useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import * as uint8arrays from 'uint8arrays'
 import * as RootKey from 'webnative/common/root-key'
-import * as UCAN from "webnative/ucan/index";
-import * as DID from "webnative/did/index";
+import * as UCAN from "webnative/ucan/index"
 
 import { filesystemStore, sessionStore } from '../../../stores'
 import {
