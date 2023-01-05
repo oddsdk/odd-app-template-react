@@ -1,11 +1,13 @@
 import * as wn from "webnative";
+import { retrieve } from "webnative/common/root-key";
 import * as uint8arrays from "uint8arrays";
 import { getRecoil, setRecoil } from "recoil-nexus";
 import type { CID } from "multiformats/cid";
 import type { PuttableUnixTree, File as WNFile } from "webnative/fs/types";
 import type { Metadata } from "webnative/fs/metadata";
 
-import { accountSettingsStore, filesystemStore } from "../stores";
+import { fileToUint8Array } from "./utils";
+import { accountSettingsStore, filesystemStore, sessionStore } from "../stores";
 import { addNotification } from "./notifications";
 
 export type Avatar = {
@@ -34,7 +36,7 @@ export const ACCOUNT_SETTINGS_DIR = ["private", "settings"];
 const AVATAR_DIR = [...ACCOUNT_SETTINGS_DIR, "avatars"];
 const AVATAR_ARCHIVE_DIR = [...AVATAR_DIR, "archive"];
 const AVATAR_FILE_NAME = "avatar";
-const FILE_SIZE_LIMIT = 5;
+const FILE_SIZE_LIMIT = 20;
 
 /**
  * Move old avatar to the archive directory
@@ -145,10 +147,10 @@ export const uploadAvatarToWNFS = async (image: File): Promise<void> => {
     // Set loading: true on the accountSettingsStore
     setRecoil(accountSettingsStore, { ...accountSettings, loading: true });
 
-    // Reject files over 5MB
+    // Reject files over 20MB
     const imageSizeInMB = image.size / (1024 * 1024);
     if (imageSizeInMB > FILE_SIZE_LIMIT) {
-      throw new Error("Image can be no larger than 5MB");
+      throw new Error("Image can be no larger than 20MB");
     }
 
     // Archive old avatar
@@ -166,7 +168,7 @@ export const uploadAvatarToWNFS = async (image: File): Promise<void> => {
     // Create a sub directory and add the avatar
     await fs.write(
       wn.path.file(...AVATAR_DIR, updatedImage.name),
-      updatedImage
+      await fileToUint8Array(updatedImage)
     );
 
     // Announce the changes to the server
@@ -177,4 +179,67 @@ export const uploadAvatarToWNFS = async (image: File): Promise<void> => {
     addNotification({ msg: error.message, type: "error" });
     console.error(error);
   }
+};
+
+export const generateRecoveryKit = async (): Promise<string> => {
+  const {
+    program: {
+      components: { crypto, reference },
+    },
+    username: { full, hashed, trimmed },
+  } = getRecoil(sessionStore);
+
+  // Get the user's read-key and base64 encode it
+  const accountDID = await reference.didRoot.lookup(hashed);
+  const readKey = await retrieve({ crypto, accountDID });
+  const encodedReadKey = uint8arrays.toString(readKey, "base64pad");
+
+  // Get today's date to display in the kit
+  const options: Intl.DateTimeFormatOptions = {
+    weekday: "short",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  };
+  const date = new Date();
+
+  const content = `#     %@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%
+#   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# %@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%
+# @@@@@%     %@@@@@@%         %@@@@@@@%     %@@@@@
+# @@@@@       @@@@@%            @@@@@@       @@@@@
+# @@@@@%      @@@@@             %@@@@@      %@@@@@
+# @@@@@@%     @@@@@     %@@%     @@@@@     %@@@@@@
+# @@@@@@@     @@@@@    %@@@@%    @@@@@     @@@@@@@
+# @@@@@@@     @@@@%    @@@@@@    @@@@@     @@@@@@@
+# @@@@@@@    %@@@@     @@@@@@    @@@@@%    @@@@@@@
+# @@@@@@@    @@@@@     @@@@@@    %@@@@@    @@@@@@@
+# @@@@@@@    @@@@@@@@@@@@@@@@     @@@@@    @@@@@@@
+# @@@@@@@    %@@@@@@@@@@@@@@@     @@@@%    @@@@@@@
+# @@@@@@@     %@@%     @@@@@@     %@@%     @@@@@@@
+# @@@@@@@              @@@@@@              @@@@@@@
+# @@@@@@@%            %@@@@@@%            %@@@@@@@
+# @@@@@@@@@%        %@@@@@@@@@@%        %@@@@@@@@@
+# %@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%
+#   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#     %@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%
+#
+# This is your recovery kit. (It’s a yaml text file)
+#
+# Created for ${trimmed} on ${date.toLocaleDateString("en-US", options)}
+#
+# Store this somewhere safe.
+#
+# Anyone with this file will have read access to your private files.
+# Losing it means you won’t be able to recover your account
+# in case you lose access to all your linked devices.
+#
+# Our team will never ask you to share this file.
+#
+# To use this file, go to ${window.location.origin}/recover/
+# Learn how to customize this kit for your users: https://guide.fission.codes/
+username: ${full}
+key: ${encodedReadKey}`;
+
+  return content;
 };

@@ -18,7 +18,12 @@ const LinkDevice = ({ pin, cancelConnection }: Props) => {
 
   return (
     <>
-      <input type="checkbox" id="my-modal-5" checked className="modal-toggle" />
+      <input
+        type="checkbox"
+        id="my-modal-5"
+        defaultChecked
+        className="modal-toggle"
+      />
       <div className="modal">
         <div className="modal-box w-narrowModal relative text-center dark:border-slate-600 dark:border">
           <div className="grid grid-flow-row auto-rows-max gap-7">

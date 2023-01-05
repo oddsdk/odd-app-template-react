@@ -17,7 +17,7 @@ const Backup = ({ changeView  }: Props) => {
       <input
         type="checkbox"
         id="backup-modal"
-        checked
+        defaultChecked
         className="modal-toggle"
       />
       <div className="modal">

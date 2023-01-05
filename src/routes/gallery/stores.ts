@@ -17,4 +17,5 @@ const initialGallery: GALLERY = {
 export const galleryStore = atom({
   key: "gallery",
   default: initialGallery as GALLERY,
+  dangerouslyAllowMutability: true,
 });

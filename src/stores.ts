@@ -9,6 +9,7 @@ import { loadTheme, type THEME } from "./lib/theme";
 export const filesystemStore = atom({
   key: "filesystem",
   default: null as FileSystem | null,
+  dangerouslyAllowMutability: true,
 });
 
 export const notificationStore = atom({
@@ -19,6 +20,7 @@ export const notificationStore = atom({
 export const sessionStore = atom({
   key: "session",
   default: initialSession as SESSION,
+  dangerouslyAllowMutability: true,
 });
 
 export const themeStore = atom({
@@ -32,4 +34,5 @@ export const accountSettingsStore = atom({
     avatar: null,
     loading: true,
   } as AccountSettings,
+  dangerouslyAllowMutability: true,
 });

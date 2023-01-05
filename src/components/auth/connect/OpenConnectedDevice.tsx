@@ -5,7 +5,7 @@ const OpenConnectDevice = () => (
     <input
       type="checkbox"
       id="open-connected-device-modal"
-      checked
+      defaultChecked
       className="modal-toggle"
     />
     <div className="modal">

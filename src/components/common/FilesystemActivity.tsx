@@ -4,7 +4,12 @@ type Props = {
 
 const FilesystemActivity = ({ activity }: Props) => (
   <>
-    <input type="checkbox" id="my-modal-5" checked className="modal-toggle" />
+    <input
+      type="checkbox"
+      id="my-modal-5"
+      defaultChecked
+      className="modal-toggle"
+    />
     <div className="modal">
       <div className="modal-box rounded-lg shadow-sm w-narrowModal relative text-center">
         <p className="flex items-center justify-center text-base-content">

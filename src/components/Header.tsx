@@ -2,7 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 
 import { sessionStore, themeStore } from "../stores";
-import { THEME, storeTheme } from "../lib/theme";
+import { DEFAULT_THEME_KEY, storeTheme, ThemeOptions } from "../lib/theme";
 import AlphaTag from "./nav/AlphaTag";
 import Avatar from "./settings/Avatar";
 import BrandLogo from "./icons/BrandLogo";
@@ -19,15 +19,19 @@ const Header = () => {
   const session = useRecoilValue(sessionStore);
 
   const handleUpdateTheme = () => {
-    const newTheme = Object.values(THEME).filter((val) => val !== theme)[0];
-    setTheme(newTheme);
+    localStorage.setItem(DEFAULT_THEME_KEY, "false");
+    const newTheme = Object.values(ThemeOptions).filter((val) => val !== theme.selectedTheme)[0];
+    setTheme({
+      selectedTheme: newTheme,
+      useDefault: false,
+    });
     storeTheme(newTheme)
   };
 
   return (
     <header className="navbar flex bg-base-100 pt-4">
       <div className="lg:hidden">
-        {session.authed ? (
+        {session.session ? (
           <label
             htmlFor="sidebar-nav"
             className="drawer-button cursor-pointer -translate-x-2"
@@ -46,7 +50,7 @@ const Header = () => {
       </div>
 
       {/* Even if the user is not authed, render this header in the connection flow */}
-      {(!session.authed ||
+      {(!session.session ||
         location.pathname.match(/register|backup|delegate/)) && (
         <div
           className="hidden lg:flex flex-1 items-center cursor-pointer gap-3"
@@ -63,25 +67,17 @@ const Header = () => {
       )}
 
       <div className="ml-auto">
-        {!session.loading && !session.authed && (
-          <div className="flex-none">
-            <Link className="btn btn-primary btn-sm !h-10" to="/connect">
-              Connect
-            </Link>
-          </div>
-        )}
-
-        {!session.loading && session.authed && !session.backupCreated && (
+        {!session.loading && session.session && !session.backupCreated && (
           <span
             onClick={() => navigate("/delegate-account")}
-            className="btn btn-sm h-10 btn-warning rounded-full bg-orange-300 border-2 border-neutral font-medium text-neutral transition-colors ease-in hover:bg-orange-300"
+            className="btn btn-sm h-10 btn-warning rounded-full bg-orange-200 border-2 border-neutral-900 font-medium text-neutral-900 transition-colors ease-in hover:bg-orange-300"
           >
             <span className="mr-2">Backup recommended</span>
             <Shield />
           </span>
         )}
 
-        {session.authed && (
+        {session.session && (
           <Link to="/settings" className="ml-2 cursor-pointer">
             <Avatar size="small" />
           </Link>
@@ -89,7 +85,7 @@ const Header = () => {
 
         <span className="ml-2">
           <span onClick={handleUpdateTheme}>
-            {theme === THEME.LIGHT ? <LightMode /> : <DarkMode />}
+            {theme.selectedTheme === ThemeOptions.LIGHT ? <LightMode /> : <DarkMode />}
           </span>
         </span>
       </div>

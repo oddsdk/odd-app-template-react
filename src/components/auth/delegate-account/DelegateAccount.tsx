@@ -30,7 +30,7 @@ const DelegateAccount = ({
       <input
         type="checkbox"
         id="delegate-account-modal"
-        checked
+        defaultChecked
         className="modal-toggle"
       />
       <div className="modal">

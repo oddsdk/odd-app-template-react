@@ -24,7 +24,7 @@ const AreYouSure = () => {
       <input
         type="checkbox"
         id="are-you-sure-modal"
-        checked
+        defaultChecked
         className="modal-toggle"
       />
       <div className="modal">

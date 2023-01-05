@@ -4,6 +4,8 @@ import { useRecoilValue } from "recoil";
 import { galleryStore } from "../../stores";
 import { deleteImageFromWNFS, type Image } from "../../lib/gallery";
 import { ipfsGatewayUrl } from "../../../../lib/app-info";
+import Download from '../../../../components/icons/Download'
+import Trash from '../../../../components/icons/Trash'
 
 type Props = {
   image: Image;
@@ -162,29 +164,57 @@ const ImageModal = ({ image, isModalOpen, onClose }: Props) => {
                 )}
               </div>
               <div className="flex flex-col items-center justify-center">
+                <p className="mb-2 text-neutral-500">
+                  Created {new Date(selectedImage.ctime).toDateString()}
+                </p>
+
                 <a
                   href={`https://ipfs.${ipfsGatewayUrl}/ipfs/${selectedImage.cid}/userland`}
                   target="_blank"
                   rel="noreferrer"
-                  className="underline mb-4 hover:text-slate-500"
+                  className="underline mb-2 hover:text-neutral-500"
                 >
-                  View on IPFS
+                  View on IPFS{selectedImage.private && `*`}
                 </a>
-                <p className="mb-4">
-                  Created at {new Date(selectedImage.ctime).toDateString()}
-                </p>
-                <div className="flex items-center justify-between gap-4">
+
+                {selectedImage.private && (
+                  <>
+                    <p className="mb-2 text-neutral-700 dark:text-neutral-500">
+                      * Your private files can only be viewed on devices that
+                      have permission. When viewed directly on IPFS, you will
+                      see the encrypted state of this file. This is because the
+                      raw IPFS gateway view does not have permission to decrypt
+                      this file.
+                    </p>
+                    <p className="mb-2 text-neutral-700 dark:text-neutral-500">
+                      Interested in private file sharing as a feature? Follow
+                      the{" "}
+                      <a
+                        className="underline"
+                        href="https://github.com/webnative-examples/webnative-app-template/issues/4"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        github issue.
+                      </a>
+                    </p>
+                  </>
+                )}
+
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-4">
                   <a
                     href={selectedImage.src}
                     download={selectedImage.name}
-                    className="btn btn-primary"
+                    className="btn btn-primary gap-2"
                   >
+                    <Download />
                     Download Image
                   </a>
                   <button
-                    className="btn btn-outline"
+                    className="btn btn-outline gap-2"
                     onClick={handleDeleteImage}
                   >
+                    <Trash />
                     Delete Image
                   </button>
                 </div>

@@ -1,7 +1,7 @@
 import { useRecoilValue } from "recoil";
 
 import { themeStore } from "../../stores";
-import { THEME } from "../../lib/theme";
+import { ThemeOptions } from "../../lib/theme";
 import type { Notification } from "../../lib/notifications";
 import CheckThinIcon from "../icons/CheckThinIcon";
 import InfoThinIcon from "../icons/InfoThinIcon";
@@ -29,7 +29,7 @@ const NotificationComp = ({ notification }: Props) => {
     error: {
       component: XThinIcon,
       props: {
-        color: theme === THEME.LIGHT ? "#ffd6d7" : "#fec3c3",
+        color: theme.selectedTheme === ThemeOptions.LIGHT ? "#ffd6d7" : "#fec3c3",
       },
     },
     success: {

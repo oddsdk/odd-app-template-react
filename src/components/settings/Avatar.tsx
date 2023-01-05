@@ -37,7 +37,7 @@ const Avatar = ({ size = 'large' }) => {
               className={`flex items-center justify-center object-cover rounded-full border-2 border-base-content ${sizeClasses}`}
             >
               <span
-                className={`animate-spin ease-linear rounded-full border-2 border-t-2 border-t-orange-300 border-base-content ${loaderSizeClasses}`}
+                className={`animate-spin ease-linear rounded-full border-2 border-t-2 border-t-orange-500 border-base-content ${loaderSizeClasses}`}
               />
             </div>
           ) : (
@@ -52,7 +52,7 @@ const Avatar = ({ size = 'large' }) => {
         <div
           className={`flex items-center justify-center bg-base-content text-base-100 uppercase font-bold rounded-full ${sizeClasses}`}
         >
-          {session.username[0]}
+          {session.username.trimmed[0]}
         </div>
       )}
     </>
