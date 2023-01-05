@@ -102,6 +102,7 @@ const DelegateAccountRoute = () => {
             padding: 0,
             width: 250,
             height: 250,
+            join: true
           }).svg()
         );
 
