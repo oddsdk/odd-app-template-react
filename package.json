@@ -24,6 +24,8 @@
   "scripts": {
     "dev": "GENERATE_SOURCEMAP=false PORT=4000 react-app-rewired start",
     "build": "GENERATE_SOURCEMAP=false react-app-rewired build",
+    "test:e2e": "playwright test",
+    "report:e2e": "playwright show-report",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -44,6 +46,7 @@
     ]
   },
   "devDependencies": {
+    "@playwright/test": "^1.29.2",
     "@types/qrcode-svg": "^1.1.1",
     "@typescript-eslint/eslint-plugin": "^5.38.0",
     "@typescript-eslint/parser": "^5.38.0",
