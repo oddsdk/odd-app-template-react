@@ -5,14 +5,10 @@ import { useRecoilValue } from 'recoil'
 import { sessionStore } from '../../../stores'
 import {
   createDID,
-  isUsernameValid,
-  isUsernameAvailable,
   prepareUsername,
   register,
   USERNAME_STORAGE_KEY,
 } from "../../../lib/auth/account";
-import CheckIcon from '../../icons/CheckIcon'
-import XIcon from '../../icons/XIcon'
 import FilesystemActivity from '../../common/FilesystemActivity'
 
 const Register = () => {
@@ -25,8 +21,8 @@ const Register = () => {
   const [registrationSuccess, setRegistrationSuccess] = useState(true);
   const [username, setUsername] = useState('')
   const [encodedUsername, setEncodedUsername] = useState('');
-  const [usernameValid, setUsernameValid] = useState(true);
-  const [usernameAvailable, setUsernameAvailable] = useState(true);
+  const [usernameValid] = useState(true);
+  const [usernameAvailable] = useState(true);
   const [checkingUsername, setCheckingUsername] = useState(false)
   const [existingAccount, setExistingAccount] = useState(false)
 
@@ -52,16 +48,6 @@ const Register = () => {
 
     const encodedUsernameLocal = await prepareUsername(fullUsername);
     setEncodedUsername(encodedUsernameLocal);
-
-    const usernameValidLocal = await isUsernameValid(encodedUsernameLocal);
-    setUsernameValid(usernameValidLocal);
-
-    if (usernameValidLocal) {
-      const usernameAvailableLocal = await isUsernameAvailable(
-        encodedUsernameLocal
-      );
-      setUsernameAvailable(usernameAvailableLocal);
-    }
 
     setCheckingUsername(false);
   };
@@ -125,48 +111,7 @@ const Register = () => {
           {checkingUsername && (
             <span className="rounded-lg border-t-2 border-l-2 border-base-content w-4 h-4 block absolute top-4 right-4 animate-spin" />
           )}
-          {!(username.length === 0) &&
-            usernameAvailable &&
-            usernameValid &&
-            !checkingUsername && (
-              <span className="w-4 h-4 block absolute top-[17px] right-4 text-green-300">
-                <CheckIcon />
-              </span>
-            )}
-          {!(username.length === 0) &&
-            !checkingUsername &&
-            !(usernameAvailable && usernameValid) && (
-              <span className="w-4 h-4 block absolute top-[17px] right-4 text-red-400">
-                <XIcon />
-              </span>
-            )}
         </div>
-
-        {!(username.length === 0) && !checkingUsername && (
-          <label htmlFor="registration" className="label mt-1">
-            {(() => {
-              if (usernameValid && usernameAvailable) {
-                return (
-                  <span className="text-xxs !p-0 text-green-300 dark:text-green-500">
-                    This username is available.
-                  </span>
-                );
-              } else if (!usernameValid) {
-                return (
-                  <span className="text-xxs !p-0 text-error">
-                    This username is not valid.
-                  </span>
-                );
-              } else if (!usernameAvailable) {
-                return (
-                  <span className="text-xxs !p-0 text-error">
-                    This username is not available.
-                  </span>
-                );
-              }
-            })()}
-          </label>
-        )}
 
         {!registrationSuccess && (
           // Error when registration fails
