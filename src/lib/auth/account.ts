@@ -1,5 +1,4 @@
 import * as uint8arrays from "uint8arrays";
-import * as webnative from "webnative";
 import type FileSystem from "webnative/fs/index";
 import { sha256 } from "webnative/components/crypto/implementation/browser";
 import { publicKeyToDid } from "webnative/did/transformers";
@@ -45,9 +44,9 @@ export const debouncedIsUsernameAvailable = asyncDebounce(
  * @param fs FileSystem
  */
 const initializeFilesystem = async (fs: FileSystem): Promise<void> => {
-  await fs.mkdir(webnative.path.directory(...GALLERY_DIRS[AREAS.PUBLIC]));
-  await fs.mkdir(webnative.path.directory(...GALLERY_DIRS[AREAS.PRIVATE]));
-  await fs.mkdir(webnative.path.directory(...ACCOUNT_SETTINGS_DIR));
+  await fs.mkdir(GALLERY_DIRS[AREAS.PUBLIC]);
+  await fs.mkdir(GALLERY_DIRS[AREAS.PRIVATE]);
+  await fs.mkdir(ACCOUNT_SETTINGS_DIR);
 };
 
 export const createDID = async (
