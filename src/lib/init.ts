@@ -5,14 +5,14 @@ import { sessionStore, filesystemStore } from "../stores";
 import { SESSION_ERROR } from "../lib/session";
 import { getBackupStatus, type BackupStatus } from "../lib/auth/backup";
 import { USERNAME_STORAGE_KEY, createDID } from "../lib/auth/account";
-import { webnativeNamespace } from "../lib/app-info";
+import { oddNamespace } from "../lib/app-info";
 
 const initialize = async (): Promise<void> => {
   try {
     let backupStatus: BackupStatus = null;
 
     const program: webnative.Program = await webnative.program({
-      namespace: webnativeNamespace,
+      namespace: oddNamespace,
       debug: process.env.NODE_ENV === "development",
     });
 
@@ -24,7 +24,7 @@ const initialize = async (): Promise<void> => {
         USERNAME_STORAGE_KEY
       )) as string;
 
-      // If the user is migrating from a version webnative-app-template before https://github.com/webnative-examples/webnative-app-template/pull/97/files#diff-a180510e798b8f833ebfdbe691c5ec4a1095076980d3e2388de29c849b2b8361R44,
+      // If the user is migrating from a version odd-app-template before https://github.com/oddsdk/odd-app-template/pull/97/files#diff-a180510e798b8f833ebfdbe691c5ec4a1095076980d3e2388de29c849b2b8361R44,
       // their username won't contain a did, so we will need to manually append a DID and add it storage here
       if (!fullUsername) {
         const did = await createDID(program.components.crypto);

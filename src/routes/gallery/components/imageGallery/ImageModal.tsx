@@ -191,7 +191,7 @@ const ImageModal = ({ image, isModalOpen, onClose }: Props) => {
                       the{" "}
                       <a
                         className="underline"
-                        href="https://github.com/webnative-examples/webnative-app-template/issues/4"
+                        href="https://github.com/oddsdk/odd-app-template/issues/4"
                         target="_blank"
                         rel="noreferrer"
                       >

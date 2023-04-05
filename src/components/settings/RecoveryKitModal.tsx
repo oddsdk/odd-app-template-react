@@ -40,7 +40,7 @@ const RecoveryKitModal = ({ handleToggleModal }: Props) => {
     if (downloadLinkRef && fileURL) {
       downloadLinkRef.current.setAttribute(
         "download",
-        `Webnative-RecoveryKit-${session.username.trimmed}.txt`
+        `ODD-RecoveryKit-${session.username.trimmed}.txt`
       );
       downloadLinkRef.current.href = fileURL;
     }

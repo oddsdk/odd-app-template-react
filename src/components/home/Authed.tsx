@@ -15,7 +15,7 @@ const Authed = () => {
       <div className="flex flex-col items-start justify-center gap-5">
         <h2 className="text-lg">Photo Gallery Demo</h2>
         <p>
-          Webnative makes it easy to implement private, encrypted, user-owned
+          The ODD SDK makes it easy to implement private, encrypted, user-owned
           storage in your app. See it in action with our photo gallery demo.
         </p>
         <Link className="btn btn-primary" to="/gallery">
@@ -26,7 +26,7 @@ const Authed = () => {
       <div className="flex flex-col items-start justify-center gap-5">
         <h2 className="text-lg">Device Connection Demo</h2>
         <p>
-          With Webnative SDK, a user&apos;s account lives only on their
+          With the ODD SDK, a user&apos;s account lives only on their
           connected devices — entirely under their control. It&apos;s easy for
           them to connect as many devices as they&apos;d like. For
           recoverability, we recommend they always connect at least two.

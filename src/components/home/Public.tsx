@@ -15,7 +15,7 @@ const Public = () => {
 
       <div className="max-w-[590px]">
         <p className="mb-5">
-          Webnative SDK is a true local-first edge computing stack. Effortlessly
+          The ODD SDK is a true local-first edge computing stack. Effortlessly
           give your users:
         </p>
 
@@ -44,7 +44,7 @@ const Public = () => {
               Unsupported device
             </h3>
             <p>
-              It appears this device isn’t supported. Webnative requires
+              It appears this device isn’t supported. ODD requires
               IndexedDB in order to function. This browser doesn’t appear to
               implement this API. Are you in a Firefox private window?
             </p>
