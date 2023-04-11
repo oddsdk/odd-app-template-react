@@ -140,7 +140,7 @@ const Register = () => {
             className="label mt-4 !p-0 hidden peer-checked:block"
           >
             <span className="text-red-400 text-left">
-              In order to ensure the security of your private data, Webnative
+              In order to ensure the security of your private data, the ODD SDK
               does not recommend creating an account from a public or shared
               computer.
             </span>

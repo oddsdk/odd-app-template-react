@@ -24,7 +24,7 @@ const NotFoundRoute = () => (
       </a>
       <a
         className="flex items-center justify-center gap-2 font-bold text-sm text-base-content"
-        href="https://github.com/webnative-examples/"
+        href="https://github.com/oddsdk/"
         target="_blank" rel="noreferrer"
       >
         Github <Github />

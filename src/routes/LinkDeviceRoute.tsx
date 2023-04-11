@@ -1,4 +1,4 @@
-import * as webnative from "webnative";
+import * as odd from "@oddjs/odd";
 import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -15,7 +15,7 @@ const useQuery = () => {
   return useMemo(() => new URLSearchParams(search), [search]);
 };
 
-let accountLinkingConsumer: webnative.AccountLinkingConsumer;
+let accountLinkingConsumer: odd.AccountLinkingConsumer;
 
 const LinkDeviceRoute = () => {
   const navigate = useNavigate();

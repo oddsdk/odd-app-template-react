@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import * as uint8arrays from 'uint8arrays'
-import * as RootKey from 'webnative/common/root-key'
-import * as UCAN from "webnative/ucan/index"
+import * as RootKey from '@oddjs/odd/common/root-key'
+import * as UCAN from "@oddjs/odd/ucan/index"
 
 import { filesystemStore, sessionStore } from '../../../stores'
 import {
@@ -25,7 +25,7 @@ const HasRecoveryKit = () => {
 
     /**
    * Parse the user's `username` and `readKey` from the uploaded recovery kit and pass them into
-   * webnative to recover the user's account and populate the `session` and `filesystem` stores
+   * odd to recover the user's account and populate the `session` and `filesystem` stores
    * @param files
    */
   const handleFileInput: (
@@ -87,7 +87,7 @@ const HasRecoveryKit = () => {
         // Update the dataRoot of the new user
         await reference.dataRoot.update(oldRootCID, ucan);
 
-        // Store the accountDID and readKey in webnative so they can be used internally load the file system
+        // Store the accountDID and readKey in odd so they can be used internally load the file system
         await RootKey.store({
           accountDID: newRootDID,
           readKey,
@@ -146,7 +146,7 @@ const HasRecoveryKit = () => {
 
         {state !== RECOVERY_STATES.Done && (
           <p className="text-xxs">
-            {`It should be a file named Webnative-RecoveryKit-{yourUsername}.txt`}
+            {`It should be a file named ODD-RecoveryKit-{yourUsername}.txt`}
           </p>
         )}
       </div>

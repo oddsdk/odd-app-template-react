@@ -1,5 +1,5 @@
 {
-  "name": "webnative-app-template-react",
+  "name": "odd-app-template-react",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -19,7 +19,7 @@
     "recoil-nexus": "^0.4.0",
     "uint8arrays": "^4.0.2",
     "web-vitals": "^2.1.4",
-    "webnative": "^0.36.3"
+    "@oddjs/odd": "^0.37.0"
   },
   "scripts": {
     "dev": "GENERATE_SOURCEMAP=false PORT=4000 react-app-rewired start",

@@ -6,11 +6,11 @@ const AboutThisTemplate = () => (
       <p className="mb-5">
         <a
           className="link text-blue-600 whitespace-nowrap pr-1"
-          href="https://github.com/fission-codes/webnative"
+          href="https://github.com/oddsdk/ts-odd"
           target="_blank"
           rel="noreferrer"
         >
-          Webnative SDK
+          ODD SDK
           <span className="-scale-x-100 scale-y-100 inline-block">⎋</span>
         </a>
         is a true local-first edge computing stack.
@@ -19,21 +19,21 @@ const AboutThisTemplate = () => (
         You can fork this
         <a
           className="link text-blue-600 whitespace-nowrap px-1"
-          href="https://github.com/webnative-examples/webnative-app-template-react"
+          href="https://github.com/oddsdk/odd-app-template-react"
           target="_blank"
           rel="noreferrer"
         >
           template
           <span className="-scale-x-100 scale-y-100 inline-block">⎋</span>
         </a>
-        to start writing your own Webnative app. Learn more in the
+        to start writing your own ODD app. Learn more in the
         <a
           className="link text-blue-600 whitespace-nowrap pl-1"
           href="https://guide.fission.codes/"
           target="_blank"
           rel="noreferrer"
         >
-          Webnative Guide
+          ODD SDK Guide
           <span className="-scale-x-100 scale-y-100 inline-block">⎋</span>
         </a>
         .
