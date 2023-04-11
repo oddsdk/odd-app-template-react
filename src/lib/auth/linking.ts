@@ -1,11 +1,11 @@
-import type * as webnative from 'webnative';
+import type * as odd from "@oddjs/odd";
 import { getRecoil } from "recoil-nexus";
 
 import { sessionStore } from "../../stores";
 
 export const createAccountLinkingConsumer = async (
   username: string
-): Promise<webnative.AccountLinkingConsumer> => {
+): Promise<odd.AccountLinkingConsumer> => {
   const session = getRecoil(sessionStore)
   if (session.authStrategy) return session.authStrategy.accountConsumer(username);
 
@@ -24,7 +24,7 @@ export const createAccountLinkingConsumer = async (
 
 export const createAccountLinkingProducer = async (
   username: string
-): Promise<webnative.AccountLinkingProducer> => {
+): Promise<odd.AccountLinkingProducer> => {
   const session = getRecoil(sessionStore);
   return session.authStrategy.accountProducer(username);
 };

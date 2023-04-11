@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import * as uint8arrays from 'uint8arrays'
-import * as RootKey from 'webnative/common/root-key'
-import * as UCAN from "webnative/ucan/index"
+import * as RootKey from '@oddjs/odd/common/root-key'
+import * as UCAN from "@oddjs/odd/ucan/index"
 
 import { filesystemStore, sessionStore } from '../../../stores'
 import {

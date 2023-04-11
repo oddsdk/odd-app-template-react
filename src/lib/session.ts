@@ -1,4 +1,4 @@
-import type * as webnative from "webnative";
+import type * as odd from "@oddjs/odd";
 
 import { appName } from "../lib/app-info";
 
@@ -10,9 +10,9 @@ type USERNAME = {
 
 export type SESSION = {
   username: USERNAME;
-  session: webnative.Session | null;
-  authStrategy: webnative.AuthenticationStrategy | null;
-  program: webnative.Program
+  session: odd.Session | null;
+  authStrategy: odd.AuthenticationStrategy | null;
+  program: odd.Program
   loading: boolean;
   backupCreated: boolean;
   error?: SESSION_ERROR;

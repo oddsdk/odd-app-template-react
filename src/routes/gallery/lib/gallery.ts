@@ -1,8 +1,8 @@
-import * as wn from "webnative";
+import * as odd from "@oddjs/odd";
 import { getRecoil, setRecoil } from "recoil-nexus";
-import type PublicFile from "webnative/fs/v1/PublicFile";
-import type PrivateFile from "webnative/fs/v1/PrivateFile";
-import { isFile } from "webnative/fs/types/check";
+import type PublicFile from "@oddjs/odd/fs/v1/PublicFile";
+import type PrivateFile from "@oddjs/odd/fs/v1/PrivateFile";
+import { isFile } from "@oddjs/odd/fs/types/check";
 
 import { filesystemStore } from "../../../stores";
 import { galleryStore, AREAS } from "../stores";
@@ -30,8 +30,8 @@ type Link = {
 };
 
 export const GALLERY_DIRS = {
-  [AREAS.PUBLIC]: wn.path.directory("public", "gallery"),
-  [AREAS.PRIVATE]: wn.path.directory("private", "gallery"),
+  [AREAS.PUBLIC]: odd.path.directory("public", "gallery"),
+  [AREAS.PRIVATE]: odd.path.directory("private", "gallery"),
 };
 
 const FILE_SIZE_LIMIT = 20;
@@ -61,7 +61,7 @@ export const getImagesFromWNFS: () => Promise<void> = async () => {
     let images = await Promise.all(
       Object.entries(links).map(async ([name]) => {
         const file = await fs.get(
-          wn.path.combine(GALLERY_DIRS[selectedArea], wn.path.file(`${name}`))
+          odd.path.combine(GALLERY_DIRS[selectedArea], odd.path.file(`${name}`))
         );
 
         if (!isFile(file)) return null;
@@ -139,7 +139,7 @@ export const uploadImageToWNFS: (image: File) => Promise<void> = async (
 
     // Reject the upload if the image already exists in the directory
     const imageExists = await fs.exists(
-      wn.path.combine(GALLERY_DIRS[selectedArea], wn.path.file(image.name))
+      odd.path.combine(GALLERY_DIRS[selectedArea], odd.path.file(image.name))
     );
     if (imageExists) {
       throw new Error(`${image.name} image already exists`);
@@ -147,7 +147,7 @@ export const uploadImageToWNFS: (image: File) => Promise<void> = async (
 
     // Create a sub directory and add some content
     await fs.write(
-      wn.path.combine(GALLERY_DIRS[selectedArea], wn.path.file(image.name)),
+      odd.path.combine(GALLERY_DIRS[selectedArea], odd.path.file(image.name)),
       await fileToUint8Array(image)
     );
 
@@ -179,13 +179,13 @@ export const deleteImageFromWNFS: (name: string) => Promise<void> = async (
     const { selectedArea } = gallery;
 
     const imageExists = await fs.exists(
-      wn.path.combine(GALLERY_DIRS[selectedArea], wn.path.file(name))
+      odd.path.combine(GALLERY_DIRS[selectedArea], odd.path.file(name))
     );
 
     if (imageExists) {
       // Remove images from server
       await fs.rm(
-        wn.path.combine(GALLERY_DIRS[selectedArea], wn.path.file(name))
+        odd.path.combine(GALLERY_DIRS[selectedArea], odd.path.file(name))
       );
 
       // Announce the changes to the server

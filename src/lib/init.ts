@@ -1,4 +1,4 @@
-import * as webnative from "webnative";
+import * as odd from "@oddjs/odd";
 import { getRecoil, setRecoil } from "recoil-nexus";
 
 import { sessionStore, filesystemStore } from "../stores";
@@ -11,7 +11,7 @@ const initialize = async (): Promise<void> => {
   try {
     let backupStatus: BackupStatus = null;
 
-    const program: webnative.Program = await webnative.program({
+    const program: odd.Program = await odd.program({
       namespace: oddNamespace,
       debug: process.env.NODE_ENV === "development",
     });
@@ -68,7 +68,7 @@ const initialize = async (): Promise<void> => {
     const session = getRecoil(sessionStore);
 
     switch (error) {
-      case webnative.ProgramError.InsecureContext:
+      case odd.ProgramError.InsecureContext:
         setRecoil(sessionStore, {
           ...session,
           loading: false,
@@ -76,7 +76,7 @@ const initialize = async (): Promise<void> => {
         });
         break;
 
-      case webnative.ProgramError.UnsupportedBrowser:
+      case odd.ProgramError.UnsupportedBrowser:
         setRecoil(sessionStore, {
           ...session,
           loading: false,

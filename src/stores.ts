@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import type FileSystem from "webnative/fs/index";
+import type FileSystem from "@oddjs/odd/fs/index";
 
 import type { AccountSettings } from "./lib/account-settings";
 import type { Notification } from "./lib/notifications";

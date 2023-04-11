@@ -1,10 +1,10 @@
-import * as wn from "webnative";
-import { retrieve } from "webnative/common/root-key";
+import * as wn from "@oddjs/odd";
+import { retrieve } from "@oddjs/odd/common/root-key";
 import * as uint8arrays from "uint8arrays";
 import { getRecoil, setRecoil } from "recoil-nexus";
 import type { CID } from "multiformats/cid";
-import type { PuttableUnixTree, File as WNFile } from "webnative/fs/types";
-import type { Metadata } from "webnative/fs/metadata";
+import type { PuttableUnixTree, File as WNFile } from "@oddjs/odd/fs/types";
+import type { Metadata } from "@oddjs/odd/fs/metadata";
 
 import { fileToUint8Array } from "./utils";
 import { accountSettingsStore, filesystemStore, sessionStore } from "../stores";
