@@ -5,9 +5,7 @@ import { getRecoil } from "recoil-nexus";
 
 import { sessionStore } from '../../stores'
 import About from '../icons/About'
-import AlphaTag from './AlphaTag'
 import BrandLogo from '../icons/BrandLogo'
-import BrandWordmark from '../icons/BrandWordmark'
 import Disconnect from '../icons/Disconnect'
 import Home from '../icons/Home'
 import NavItem from './NavItem'
@@ -96,8 +94,6 @@ const SidebarNav = ({ children }: any) => {
               }}
             >
               <BrandLogo />
-              <BrandWordmark />
-              <AlphaTag />
             </div>
 
             {/* Upper Menu */}
